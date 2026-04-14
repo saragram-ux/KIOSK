@@ -1,0 +1,568 @@
+/* ============================================
+   KIOSK — Design System Starter
+   A Copenhagen hydration brand.
+   
+   Structure:
+   1. Tokens (CSS custom properties)
+   2. Reset & base styles
+   3. Typography
+   4. Layout
+   5. Navigation
+   6. Buttons
+   7. Forms
+   8. Product card
+   9. Product grid
+   10. Badges
+   11. Footer
+   12. Utility classes
+   13. Responsive
+   ============================================ */
+
+/* --------------------------------------------
+   1. TOKENS
+   Change these to retheme the entire site.
+   -------------------------------------------- */
+
+:root {
+  /* Color — newsprint + acid green signal */
+  --color-base: #f4f4f2;
+  --color-surface: #ffffff;
+  --color-surface-alt: #eaeae7;
+  --color-surface-hover: #f0f0ed; /* neutral highlight for hover states */
+  --color-ink: #111111;
+  --color-ink-soft: #5f5b57;
+  --color-ink-faint: #9a9691;
+  --color-accent: #b7ff2e;
+  --color-accent-soft: #e9ffd1; /* rare — highlight backgrounds only */
+  --color-border: #dcdcda;
+  --color-border-strong: #111111;
+  --color-success: #3a8a5c;
+  --color-error: #c43d2e;
+
+  /* Typography — Satoshi for editorial sharpness */
+  --font-body: "Satoshi", "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.2rem;
+  --text-xl: 1.65rem;
+  --text-2xl: 2.35rem;
+  --text-3xl: 3.25rem;
+  --leading-tight: 1.1;
+  --leading-normal: 1.5;
+  --tracking-tight: -0.03em;
+  --tracking-wide: 0.06em;
+
+  /* Spacing */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2.5rem;
+  --space-2xl: 4rem;
+  --space-3xl: 6rem;
+
+  /* Shape */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-pill: 100px;
+}
+
+/* --------------------------------------------
+   2. RESET & BASE
+   -------------------------------------------- */
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+  color: var(--color-ink);
+  background-color: var(--color-base);
+  -webkit-font-smoothing: antialiased;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  color: var(--color-ink);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--color-ink-soft);
+}
+
+/* --------------------------------------------
+   3. TYPOGRAPHY
+   -------------------------------------------- */
+
+h1,
+h2,
+h3 {
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+}
+
+h1 {
+  font-size: var(--text-3xl);
+  font-weight: 700;
+}
+h2 {
+  font-size: var(--text-2xl);
+  font-weight: 700;
+}
+h3 {
+  font-size: var(--text-xl);
+  font-weight: 700;
+}
+
+.text-sm {
+  font-size: var(--text-sm);
+}
+.text-lg {
+  font-size: var(--text-lg);
+}
+.text-soft {
+  color: var(--color-ink-soft);
+}
+.text-mono {
+  font-family: var(--font-mono);
+}
+
+/* Uppercase micro-label — used for badges, nav labels, section kickers */
+.label {
+  font-size: var(--text-xs);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-ink-soft);
+}
+
+/* --------------------------------------------
+   4. LAYOUT
+   -------------------------------------------- */
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 var(--space-lg);
+}
+
+.section {
+  padding: var(--space-3xl) 0;
+}
+
+/* Thin top border between stacked sections — the KIOSK signature */
+.section + .section {
+  border-top: 1px solid var(--color-border);
+}
+
+/* Alternate section background — max one per page */
+.section-alt {
+  background: var(--color-surface-alt);
+}
+
+/* Section heading with trailing link — "New this week  View all →" */
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+/* Narrow centered container — signup, login, register */
+.container-narrow {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 0 var(--space-lg);
+  text-align: center;
+}
+
+/* Prose width limiter — readable line length for body text */
+.max-prose {
+  max-width: 38rem;
+}
+
+/* Homepage page wrappers — structural only, no visual overrides yet */
+.home-hero {
+}
+
+.home-products {
+}
+
+.home-categories {
+}
+
+.home-signup {
+}
+
+/* --------------------------------------------
+   5. NAVIGATION
+   -------------------------------------------- */
+
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-md) var(--space-lg);
+  border-bottom: 1px solid var(--color-border);
+  position: sticky;
+  top: 0;
+  background: var(--color-base);
+  z-index: 100;
+}
+
+.nav-logo {
+  font-size: var(--text-lg);
+  font-weight: 700;
+  letter-spacing: var(--tracking-tight);
+}
+
+.nav-links {
+  display: flex;
+  gap: var(--space-lg);
+  list-style: none;
+}
+
+.nav-links a {
+  font-size: var(--text-sm);
+  font-weight: 500;
+}
+
+.nav-actions {
+  display: flex;
+  gap: var(--space-md);
+  align-items: center;
+}
+
+/* --------------------------------------------
+   6. BUTTONS
+   Three variants. That's the whole system.
+   -------------------------------------------- */
+
+.btn {
+  display: inline-block;
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-md);
+  border: 1.5px solid transparent;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+/* Primary — dark fill */
+.btn-primary {
+  background: var(--color-ink);
+  color: var(--color-base);
+  border-color: var(--color-ink);
+}
+.btn-primary:hover {
+  background: #333;
+}
+
+/* Secondary — outlined */
+.btn-secondary {
+  background: transparent;
+  color: var(--color-ink);
+  border-color: var(--color-ink);
+}
+.btn-secondary:hover {
+  background: var(--color-ink);
+  color: var(--color-base);
+}
+
+/* Accent — acid green signal */
+.btn-accent {
+  background: var(--color-accent);
+  color: var(--color-ink);
+  border-color: var(--color-accent);
+}
+.btn-accent:hover {
+  background: var(--color-accent);
+  filter: brightness(0.92);
+}
+
+/* Small — nav actions, admin tables */
+.btn-sm {
+  padding: 0.4rem 1rem;
+  font-size: var(--text-xs);
+}
+
+/* --------------------------------------------
+   7. FORMS
+   -------------------------------------------- */
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.form-label {
+  font-size: var(--text-sm);
+  font-weight: 500;
+}
+
+.form-input {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  padding: 0.75rem 1rem;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  width: 100%;
+  transition: border-color 0.2s ease;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--color-ink);
+}
+
+.form-input::placeholder {
+  color: var(--color-ink-faint);
+}
+
+/* Inline form row — e.g. email + submit side by side */
+.form-inline {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.form-inline .form-input {
+  flex: 1;
+}
+
+/* Validation error message */
+.form-error {
+  font-size: var(--text-sm);
+  color: var(--color-error);
+}
+
+/* --------------------------------------------
+   8. PRODUCT CARD
+   Reused on: homepage, category, search, favorites
+   -------------------------------------------- */
+
+.card {
+  background: var(--color-surface);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  overflow: hidden;
+  transition: background 0.2s ease;
+}
+
+.card:hover {
+  background: var(--color-surface-hover);
+}
+
+.card-image {
+  aspect-ratio: 4 / 5;
+  background: var(--color-surface-alt);
+  /* Replace with <img> when you have product images */
+}
+
+.card-body {
+  padding: var(--space-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.card-title {
+  font-weight: 700;
+  font-size: var(--text-base);
+}
+
+.card-subtitle {
+  font-size: var(--text-sm);
+  color: var(--color-ink-soft);
+}
+
+.card-price {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--color-ink-soft);
+}
+
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Text-only card — categories, info blocks, empty states */
+.card-text .card-body {
+  padding: var(--space-xl);
+}
+
+.card-count {
+  display: inline-block;
+  font-size: var(--text-sm);
+  margin-top: var(--space-md);
+}
+
+/* --------------------------------------------
+   9. PRODUCT GRID
+   auto-fill handles responsiveness automatically
+   -------------------------------------------- */
+
+.grid {
+  display: grid;
+  gap: var(--space-lg);
+}
+
+.grid-products {
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+}
+
+/* Two-column grid for categories, features, etc. */
+.grid-2 {
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+}
+
+/* --------------------------------------------
+   10. BADGES
+   Pill shape = KIOSK's signature accent element
+   -------------------------------------------- */
+
+.badge {
+  display: inline-block;
+  font-size: var(--text-xs);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  padding: 0.2rem 0.65rem;
+  border-radius: var(--radius-pill);
+  background: var(--color-accent);
+  color: var(--color-ink);
+}
+
+.badge-outline {
+  background: transparent;
+  color: var(--color-ink);
+  border: 1px solid var(--color-border);
+}
+
+.badge-success {
+  background: var(--color-success);
+  color: #fff;
+}
+
+/* --------------------------------------------
+   11. FOOTER
+   -------------------------------------------- */
+
+.footer {
+  border-top: 1px solid var(--color-border);
+  padding: var(--space-2xl) 0;
+  color: var(--color-ink-soft);
+  font-size: var(--text-sm);
+}
+
+.footer-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  gap: var(--space-xl);
+  flex-wrap: wrap;
+}
+
+.footer-col {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.footer-col a {
+  color: var(--color-ink-soft);
+}
+
+.footer-col a:hover {
+  color: var(--color-ink);
+}
+
+/* --------------------------------------------
+   12. UTILITY CLASSES
+   Only the ones you'll actually use.
+   -------------------------------------------- */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.mt-sm {
+  margin-top: var(--space-sm);
+}
+.mt-md {
+  margin-top: var(--space-md);
+}
+.mt-lg {
+  margin-top: var(--space-lg);
+}
+.mb-md {
+  margin-bottom: var(--space-md);
+}
+.mb-lg {
+  margin-bottom: var(--space-lg);
+}
+
+/* --------------------------------------------
+   13. RESPONSIVE
+   One breakpoint handles most of it.
+   -------------------------------------------- */
+
+@media (max-width: 768px) {
+  h1 {
+    font-size: var(--text-2xl);
+  }
+  h2 {
+    font-size: var(--text-xl);
+  }
+
+  .section {
+    padding: var(--space-2xl) 0;
+  }
+
+  .nav-links {
+    display: none; /* Replace with hamburger menu in JS later */
+  }
+
+  .footer-inner {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0 var(--space-md);
+  }
+
+  .form-inline {
+    flex-direction: column;
+  }
+}
