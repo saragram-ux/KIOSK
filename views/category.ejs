@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('partials/head') %>
+  <body>
+    <%- include('partials/header', { categories: categories }) %>
+
+    <main class="site-main">
+      <section class="section category-header">
+        <div class="container">
+          <p class="label mb-md">Category</p>
+          <h1><%= category.name %></h1>
+
+          <% if (category.description) { %>
+            <p class="text-lg text-soft mt-md max-prose">
+              <%= category.description %>
+            </p>
+          <% } %>
+        </div>
+      </section>
+
+      <section class="section category-products">
+        <div class="container">
+          <% if (products.length > 0) { %>
+            <div class="grid grid-products">
+              <% products.forEach(product => { %>
+                <%- include('partials/product-card', { product: product }) %>
+              <% }) %>
+            </div>
+          <% } else { %>
+            <div class="card-text">
+              <div class="card-body">
+                <h3>No drinks in this category yet</h3>
+                <p class="text-soft mt-sm">
+                  Check back soon or browse the full menu.
+                </p>
+                <span class="card-count">
+                  <a href="/products">View all drinks &rarr;</a>
+                </span>
+              </div>
+            </div>
+          <% } %>
+        </div>
+      </section>
+    </main>
+
+    <%- include('partials/footer') %>
+  </body>
+</html>
