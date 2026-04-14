@@ -119,3 +119,67 @@ router.get("/categories/:slug", function (req, res, next) {
     });
   });
 });
+
+router.get("/search", function (req, res, next) {
+  const query = req.query.q ? req.query.q.trim() : "";
+
+  const navCategoriesSql = `
+    SELECT id, name, slug
+    FROM categories
+    ORDER BY name ASC
+  `;
+
+  if (!query) {
+    return db.all(navCategoriesSql, [], (navErr, categories) => {
+      if (navErr) {
+        return next(navErr);
+      }
+
+      res.render("search", {
+        title: "Search | KIOSK",
+        categories,
+        query: "",
+        products: [],
+      });
+    });
+  }
+
+  const productsSql = `
+    SELECT id, name, slug, brand, price, image_url, published_at
+    FROM products
+    WHERE date(published_at) <= date('now')
+      AND name LIKE ?
+    ORDER BY date(published_at) DESC
+  `;
+
+  db.all(productsSql, [`%${query}%`], (productsErr, productRows) => {
+    if (productsErr) {
+      return next(productsErr);
+    }
+
+    const products = productRows.map((product) => {
+      const publishedDate = new Date(product.published_at);
+      const now = new Date();
+      const diffInMs = now - publishedDate;
+      const diffInDays = diffInMs / (1000 * 60 * 60 * 24);
+
+      return {
+        ...product,
+        is_new: diffInDays < 7,
+      };
+    });
+
+    db.all(navCategoriesSql, [], (navErr, categories) => {
+      if (navErr) {
+        return next(navErr);
+      }
+
+      res.render("search", {
+        title: `Search: ${query} | KIOSK`,
+        categories,
+        query,
+        products,
+      });
+    });
+  });
+});

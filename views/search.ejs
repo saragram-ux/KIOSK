@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('partials/head') %>
+  <body>
+    <%- include('partials/header', { categories: categories }) %>
+
+    <main class="site-main">
+      <section class="section search-header">
+        <div class="container">
+          <p class="label mb-md">Search</p>
+          <h1>Results for "<%= query %>"</h1>
+          <p class="text-soft mt-md">
+            Found <%= products.length %> <%= products.length === 1 ? "drink" : "drinks" %>
+          </p>
+        </div>
+      </section>
+
+      <section class="section search-results">
+        <div class="container">
+          <% if (products.length > 0) { %>
+            <div class="grid grid-products">
+              <% products.forEach(product => { %>
+                <%- include('partials/product-card', { product: product }) %>
+              <% }) %>
+            </div>
+          <% } else { %>
+            <div class="card-text">
+              <div class="card-body">
+                <h3>No drinks matched your search</h3>
+                <p class="text-soft mt-sm">
+                  Try another search term or browse the full menu.
+                </p>
+                <span class="card-count">
+                  <a href="/products">View all drinks &rarr;</a>
+                </span>
+              </div>
+            </div>
+          <% } %>
+        </div>
+      </section>
+    </main>
+
+    <%- include('partials/footer') %>
+  </body>
+</html>
