@@ -2,11 +2,22 @@
 <header class="nav">
   <a href="/" class="nav-logo">KIOSK</a>
 
-  <nav>
+  <form action="/search" method="GET" class="nav-search">
+    <label for="site-search" class="sr-only">Search drinks</label>
+    <input
+      type="search"
+      id="site-search"
+      name="q"
+      class="form-input"
+      placeholder="Search drinks"
+    />
+  </form>
+
+  <nav aria-label="Main navigation">
     <ul class="nav-links">
-      <li><a href="/products">Drinks</a></li>
+      <li><a href="/news">New</a></li>
       <li><a href="/categories">Categories</a></li>
-      <li><a href="/about">About</a></li>
+      <li><a href="/products">Drinks</a></li>
     </ul>
   </nav>
 
