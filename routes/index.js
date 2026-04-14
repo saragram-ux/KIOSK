@@ -465,4 +465,113 @@ router.post("/register", function (req, res, next) {
   });
 });
 
+router.get("/login", function (req, res, next) {
+  const navCategoriesSql = `
+    SELECT id, name, slug
+    FROM categories
+    ORDER BY name ASC
+  `;
+
+  db.all(navCategoriesSql, [], (navErr, categories) => {
+    if (navErr) {
+      return next(navErr);
+    }
+
+    res.render("login", {
+      title: "Log in | KIOSK",
+      categories,
+      errors: {},
+      formData: {
+        email: "",
+      },
+    });
+  });
+});
+
+router.post("/login", function (req, res, next) {
+  const { email, password } = req.body;
+
+  const errors = {};
+  const formData = {
+    email: email ? email.trim() : "",
+  };
+
+  const navCategoriesSql = `
+    SELECT id, name, slug
+    FROM categories
+    ORDER BY name ASC
+  `;
+
+  if (!formData.email) {
+    errors.email = "Email is required.";
+  }
+
+  if (!password || password.trim().length === 0) {
+    errors.password = "Password is required.";
+  }
+
+  if (Object.keys(errors).length > 0) {
+    return db.all(navCategoriesSql, [], (navErr, categories) => {
+      if (navErr) {
+        return next(navErr);
+      }
+
+      res.render("login", {
+        title: "Log in | KIOSK",
+        categories,
+        errors,
+        formData,
+      });
+    });
+  }
+
+  const userSql = `
+    SELECT id, email, password, admin
+    FROM users
+    WHERE email = ?
+    LIMIT 1
+  `;
+
+  db.get(userSql, [formData.email], (userErr, user) => {
+    if (userErr) {
+      return next(userErr);
+    }
+
+    if (!user || user.password !== password) {
+      return db.all(navCategoriesSql, [], (navErr, categories) => {
+        if (navErr) {
+          return next(navErr);
+        }
+
+        errors.general = "Invalid email or password.";
+
+        res.render("login", {
+          title: "Log in | KIOSK",
+          categories,
+          errors,
+          formData,
+        });
+      });
+    }
+
+    req.session.user = {
+      id: user.id,
+      email: user.email,
+      admin: user.admin,
+    };
+
+    res.redirect("/");
+  });
+});
+
+router.post("/logout", function (req, res, next) {
+  req.session.destroy((err) => {
+    if (err) {
+      return next(err);
+    }
+
+    res.redirect("/");
+  });
+});
+
 module.exports = router;
