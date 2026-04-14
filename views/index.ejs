@@ -1,11 +1,71 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title><%= title %></title>
-    <link rel="stylesheet" href="/stylesheets/style.css" />
-  </head>
+<html lang="en">
+  <%- include('partials/head') %>
   <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
+    <%- include('partials/header') %>
+
+    <main class="site-main">
+      <section class="section home-hero">
+        <div class="container">
+          <p class="label mb-md">Copenhagen — Open daily</p>
+          <h1>Hydration.<br />Point of view included.</h1>
+          <p class="text-lg text-soft mt-md max-prose">
+            Seasonal ingredients, Copenhagen water, nothing unnecessary. Drinks
+            for people who know what they like.
+          </p>
+          <div class="mt-lg">
+            <a href="/products" class="btn btn-primary">See the menu</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section home-products">
+        <div class="container">
+          <div class="section-header mb-lg">
+            <h2>New this week</h2>
+            <a href="/products" class="text-sm text-soft">View all &rarr;</a>
+          </div>
+
+          <div class="grid grid-products">
+            <!-- keep your existing product cards here for now -->
+          </div>
+        </div>
+      </section>
+
+      <section class="section home-categories">
+        <div class="container">
+          <p class="label mb-md">Browse by mood</p>
+          <h2 class="mb-lg">Categories</h2>
+
+          <div class="grid grid-2">
+            <!-- keep your existing category cards here for now -->
+          </div>
+        </div>
+      </section>
+
+      <section class="section section-alt home-signup">
+        <div class="container-narrow">
+          <h2>Stay in the loop</h2>
+          <p class="text-soft mt-sm mb-lg">
+            Seasonal drops, new menu items, and zero spam. Takes ten seconds.
+          </p>
+
+          <form action="/newsletter" method="POST" class="form-inline">
+            <label for="email" class="sr-only">Email address</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              class="form-input"
+              placeholder="your@email.com"
+              required
+            />
+            <button type="submit" class="btn btn-accent">Sign up</button>
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <%- include('partials/footer') %>
   </body>
 </html>
