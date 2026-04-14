@@ -287,6 +287,19 @@ h3 {
 }
 
 /* --------------------------------------------
+   4.3 AUTH (PAGE LAYOUT)
+   Register / login pages
+   -------------------------------------------- */
+
+.auth-panel {
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+}
+
+/* --------------------------------------------
    5. NAVIGATION
    Mobile:
    - logo first

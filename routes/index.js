@@ -373,4 +373,96 @@ router.post("/basket/decrease/:slug", function (req, res) {
 
   res.redirect("/basket");
 });
+
+router.get("/register", function (req, res, next) {
+  const navCategoriesSql = `
+    SELECT id, name, slug
+    FROM categories
+    ORDER BY name ASC
+  `;
+
+  db.all(navCategoriesSql, [], (navErr, categories) => {
+    if (navErr) {
+      return next(navErr);
+    }
+
+    res.render("register", {
+      title: "Create account | KIOSK",
+      categories,
+      errors: {},
+      formData: {
+        email: "",
+      },
+    });
+  });
+});
+
+router.post("/register", function (req, res, next) {
+  const { email, password } = req.body;
+
+  const errors = {};
+  const formData = {
+    email: email ? email.trim() : "",
+  };
+
+  if (!formData.email) {
+    errors.email = "Email is required.";
+  }
+
+  if (!password || password.trim().length < 6) {
+    errors.password = "Password must be at least 6 characters.";
+  }
+
+  const navCategoriesSql = `
+    SELECT id, name, slug
+    FROM categories
+    ORDER BY name ASC
+  `;
+
+  if (Object.keys(errors).length > 0) {
+    return db.all(navCategoriesSql, [], (navErr, categories) => {
+      if (navErr) {
+        return next(navErr);
+      }
+
+      res.render("register", {
+        title: "Create account | KIOSK",
+        categories,
+        errors,
+        formData,
+      });
+    });
+  }
+
+  const insertSql = `
+    INSERT INTO users (email, password, admin)
+    VALUES (?, ?, 0)
+  `;
+
+  db.run(insertSql, [formData.email, password], function (insertErr) {
+    if (insertErr) {
+      return db.all(navCategoriesSql, [], (navErr, categories) => {
+        if (navErr) {
+          return next(navErr);
+        }
+
+        if (insertErr.message.includes("UNIQUE")) {
+          errors.email = "An account with this email already exists.";
+        } else {
+          errors.general = "Something went wrong. Please try again.";
+        }
+
+        res.render("register", {
+          title: "Create account | KIOSK",
+          categories,
+          errors,
+          formData,
+        });
+      });
+    }
+
+    res.redirect("/login");
+  });
+});
+
 module.exports = router;

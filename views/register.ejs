@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('partials/head') %>
+  <body>
+    <%- include('partials/header', { categories: categories }) %>
+
+    <main class="site-main">
+      <section class="section auth-panel">
+        <div class="container-narrow">
+          <p class="label mb-md">Account</p>
+          <h1>Create account</h1>
+
+          <form action="/register" method="POST" class="auth-form mt-lg">
+            <% if (errors.general) { %>
+              <p class="form-error mb-md"><%= errors.general %></p>
+            <% } %>
+
+            <div class="form-group">
+              <label for="email" class="form-label">Email</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                class="form-input"
+                value="<%= formData.email %>"
+                required
+              >
+              <% if (errors.email) { %>
+                <p class="form-error"><%= errors.email %></p>
+              <% } %>
+            </div>
+
+            <div class="form-group mt-md">
+              <label for="password" class="form-label">Password</label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                class="form-input"
+                required
+              >
+              <% if (errors.password) { %>
+                <p class="form-error"><%= errors.password %></p>
+              <% } %>
+            </div>
+
+            <div class="mt-lg">
+              <button type="submit" class="btn btn-primary">Register</button>
+            </div>
+          </form>
+
+          <p class="text-soft mt-lg">
+            Already have an account?
+            <a href="/login">Log in &rarr;</a>
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <%- include('partials/footer') %>
+  </body>
+</html>
