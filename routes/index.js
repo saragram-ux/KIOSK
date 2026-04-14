@@ -48,8 +48,6 @@ router.get("/", function (req, res, next) {
   });
 });
 
-module.exports = router;
-
 router.get("/categories/:slug", function (req, res, next) {
   const categorySlug = req.params.slug;
 
@@ -254,3 +252,89 @@ router.get("/products/:slug", function (req, res, next) {
     });
   });
 });
+// --------------------------------------------
+// BASKET ROUTES
+// --------------------------------------------
+
+router.get("/basket", function (req, res, next) {
+  const basket = req.session.basket || [];
+
+  const navCategoriesSql = `
+    SELECT id, name, slug
+    FROM categories
+    ORDER BY name ASC
+  `;
+
+  db.all(navCategoriesSql, [], (navErr, categories) => {
+    if (navErr) {
+      return next(navErr);
+    }
+
+    res.render("basket", {
+      title: "Basket | KIOSK",
+      categories,
+      basket,
+    });
+  });
+});
+
+
+router.post("/basket/add/:slug", function (req, res, next) {
+  const productSlug = req.params.slug;
+
+  const productSql = `
+    SELECT id, name, slug, brand, price
+    FROM products
+    WHERE slug = ?
+      AND date(published_at) <= date('now')
+    LIMIT 1
+  `;
+
+  db.get(productSql, [productSlug], (err, product) => {
+    if (err) return next(err);
+
+    if (!product) {
+      return res.status(404).render("error", {
+        message: "Product not found",
+        error: {},
+      });
+    }
+
+    if (!req.session.basket) {
+      req.session.basket = [];
+    }
+
+    const existingItem = req.session.basket.find(
+      (item) => item.slug === product.slug
+    );
+
+    if (existingItem) {
+      existingItem.quantity += 1;
+    } else {
+      req.session.basket.push({
+        id: product.id,
+        slug: product.slug,
+        name: product.name,
+        brand: product.brand,
+        price: product.price,
+        quantity: 1,
+      });
+    }
+
+    res.redirect("/basket");
+  });
+});
+
+
+router.post("/basket/remove/:slug", function (req, res) {
+  if (!req.session.basket) {
+    return res.redirect("/basket");
+  }
+
+  req.session.basket = req.session.basket.filter(
+    (item) => item.slug !== req.params.slug
+  );
+
+  res.redirect("/basket");
+});
+module.exports = router;

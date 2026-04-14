@@ -24,7 +24,9 @@
               <p class="product-price mt-lg"><%= product.price %> SEK</p>
 
               <div class="mt-lg">
-                <button type="button" class="btn btn-primary">Add to basket</button>
+                <form action="/basket/add/<%= product.slug %>" method="POST" class="mt-lg">
+  <button type="submit" class="btn btn-primary">Add to basket</button>
+</form>
               </div>
 
               <p class="card-brand mt-md"><%= product.brand %></p>

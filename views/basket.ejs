@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('partials/head') %>
+  <body>
+    <%- include('partials/header', { categories: categories }) %>
+
+    <main class="site-main">
+      <section class="section basket-page">
+        <div class="container">
+          <p class="label mb-md">Basket</p>
+          <h1>Your basket</h1>
+
+          <% if (basket.length > 0) { %>
+            <div class="basket-list mt-lg">
+              <% let total = 0; %>
+
+              <% basket.forEach(item => { %>
+                <% const itemTotal = item.price * item.quantity; %>
+                <% total += itemTotal; %>
+
+                <div class="basket-item">
+                  <div class="basket-item-info">
+                    <h3><%= item.name %></h3>
+                    <p class="card-brand"><%= item.brand %></p>
+                  </div>
+
+                  <div class="basket-item-meta">
+                    <p class="text-mono"><%= item.price %> SEK</p>
+                    <p class="text-mono">Qty: <%= item.quantity %></p>
+                    <p class="text-mono"><%= itemTotal %> SEK</p>
+
+                    <form action="/basket/remove/<%= item.slug %>" method="POST">
+                      <button type="submit" class="btn btn-secondary btn-sm">
+                        Remove
+                      </button>
+                    </form>
+                  </div>
+                </div>
+              <% }) %>
+            </div>
+
+            <div class="basket-summary mt-lg">
+              <h2>Total</h2>
+              <p class="product-price mt-sm"><%= total %> SEK</p>
+              <div class="mt-lg">
+                <button type="button" class="btn btn-accent">Checkout</button>
+              </div>
+            </div>
+          <% } else { %>
+            <div class="card-text mt-lg">
+              <div class="card-body">
+                <h3>Your basket is empty</h3>
+                <p class="text-soft mt-sm">
+                  Add something from the menu to get started.
+                </p>
+                <span class="card-count">
+                  <a href="/products">Browse drinks &rarr;</a>
+                </span>
+              </div>
+            </div>
+          <% } %>
+        </div>
+      </section>
+    </main>
+
+    <%- include('partials/footer') %>
+  </body>
+</html>
