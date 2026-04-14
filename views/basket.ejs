@@ -25,16 +25,32 @@
                   </div>
 
                   <div class="basket-item-meta">
-                    <p class="text-mono"><%= item.price %> SEK</p>
-                    <p class="text-mono">Qty: <%= item.quantity %></p>
-                    <p class="text-mono"><%= itemTotal %> SEK</p>
+  <p class="text-mono"><%= item.price %> SEK</p>
 
-                    <form action="/basket/remove/<%= item.slug %>" method="POST">
-                      <button type="submit" class="btn btn-secondary btn-sm">
-                        Remove
-                      </button>
-                    </form>
-                  </div>
+  <div class="basket-quantity">
+    <form action="/basket/decrease/<%= item.slug %>" method="POST">
+      <button type="submit" class="btn btn-secondary btn-sm" aria-label="Decrease quantity">
+        -
+      </button>
+    </form>
+
+    <span class="basket-quantity-value text-mono"><%= item.quantity %></span>
+
+    <form action="/basket/increase/<%= item.slug %>" method="POST">
+      <button type="submit" class="btn btn-secondary btn-sm" aria-label="Increase quantity">
+        +
+      </button>
+    </form>
+  </div>
+
+  <p class="text-mono"><%= itemTotal %> SEK</p>
+
+  <form action="/basket/remove/<%= item.slug %>" method="POST">
+    <button type="submit" class="btn btn-secondary btn-sm">
+      Remove
+    </button>
+  </form>
+</div>
                 </div>
               <% }) %>
             </div>

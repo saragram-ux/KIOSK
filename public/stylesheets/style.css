@@ -749,6 +749,17 @@ h3 {
   .basket-item-meta {
     align-items: flex-end;
   }
+
+  .basket-quantity {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+  }
+
+  .basket-quantity-value {
+    min-width: 2rem;
+    text-align: center;
+  }
 }
 
 @media (min-width: 1024px) {
