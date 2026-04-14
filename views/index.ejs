@@ -35,15 +35,17 @@
       </section>
 
       <section class="section home-categories">
-        <div class="container">
-          <p class="label mb-md">Browse by mood</p>
-          <h2 class="mb-lg">Categories</h2>
+  <div class="container">
+    <p class="label mb-md">Browse by mood</p>
+    <h2 class="mb-lg">Categories</h2>
 
-          <div class="grid grid-2">
-            <!-- keep your existing category cards here for now -->
-          </div>
-        </div>
-      </section>
+    <div class="grid grid-2">
+      <% categories.forEach(category => { %>
+        <%- include('partials/category-card', { category: category }) %>
+      <% }) %>
+    </div>
+  </div>
+</section>
 
       <section class="section section-alt home-signup">
         <div class="container-narrow">

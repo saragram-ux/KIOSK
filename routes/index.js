@@ -3,7 +3,7 @@ var router = express.Router();
 const db = require("../data/db");
 
 router.get("/", function (req, res, next) {
-  const sql = `
+  const productsSql = `
     SELECT id, name, slug, brand, price, image_url, published_at
     FROM products
     WHERE date(published_at) <= date('now')
@@ -11,12 +11,18 @@ router.get("/", function (req, res, next) {
     LIMIT 8
   `;
 
-  db.all(sql, [], (err, rows) => {
-    if (err) {
-      return next(err);
+  const categoriesSql = `
+    SELECT id, name, slug, description, image_url
+    FROM categories
+    ORDER BY name ASC
+  `;
+
+  db.all(productsSql, [], (productsErr, productRows) => {
+    if (productsErr) {
+      return next(productsErr);
     }
 
-    const products = rows.map((product) => {
+    const products = productRows.map((product) => {
       const publishedDate = new Date(product.published_at);
       const now = new Date();
       const diffInMs = now - publishedDate;
@@ -28,9 +34,16 @@ router.get("/", function (req, res, next) {
       };
     });
 
-    res.render("index", {
-      title: "KIOSK",
-      products,
+    db.all(categoriesSql, [], (categoriesErr, categories) => {
+      if (categoriesErr) {
+        return next(categoriesErr);
+      }
+
+      res.render("index", {
+        title: "KIOSK",
+        products,
+        categories,
+      });
     });
   });
 });

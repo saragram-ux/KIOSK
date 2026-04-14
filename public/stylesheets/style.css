@@ -486,6 +486,7 @@ h3 {
 
 /* Text-only card — categories, info blocks, empty states */
 .card-text {
+  display: block;
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-sm);
