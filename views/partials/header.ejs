@@ -1,29 +1,40 @@
-<!-- views/partials/header.ejs -->
-<header class="nav">
-  <a href="/" class="nav-logo">KIOSK</a>
+<header class="site-header">
+  <div class="container">
+    <div class="top-header">
+      <a href="/" class="logo-link">KIOSK</a>
 
-  <form action="/search" method="GET" class="nav-search">
-    <label for="site-search" class="sr-only">Search drinks</label>
-    <input
-      type="search"
-      id="site-search"
-      name="q"
-      class="form-input"
-      placeholder="Search drinks"
-    />
-  </form>
+      <div class="header-actions">
+        <form action="/search" method="GET" class="search-form">
+          <label for="site-search" class="sr-only">Search drinks</label>
+          <input
+            type="search"
+            id="site-search"
+            name="q"
+            class="form-input search-input"
+            placeholder="Search drinks"
+          />
+        </form>
 
-  <nav aria-label="Main navigation">
-    <ul class="nav-links">
-      <li><a href="/news">New</a></li>
-      <li><a href="/categories">Categories</a></li>
-      <li><a href="/products">Drinks</a></li>
-    </ul>
-  </nav>
+        <div class="header-icons">
+          <a href="/favorites" class="icon-link" aria-label="Favorites">
+            <i class="ph ph-heart"></i>
+          </a>
+          <a href="/basket" class="icon-link" aria-label="Basket">
+            <i class="ph ph-basket"></i>
+          </a>
+          <a href="/login" class="icon-link" aria-label="Log in">
+            <i class="ph ph-sign-in"></i>
+          </a>
+        </div>
+      </div>
+    </div>
 
-  <div class="nav-actions">
-    <a href="/favorites" class="text-sm">Favorites</a>
-    <a href="/basket" class="text-sm">Basket (0)</a>
-    <a href="/login" class="btn btn-secondary btn-sm">Log in</a>
+    <nav class="site-nav" aria-label="Main navigation">
+      <ul class="nav-list">
+        <li><a href="/news">New</a></li>
+        <li><a href="/categories">Categories</a></li>
+        <li><a href="/products">Drinks</a></li>
+      </ul>
+    </nav>
   </div>
 </header>

@@ -209,41 +209,80 @@ h3 {
 
 /* --------------------------------------------
    5. NAVIGATION
+   Mobile:
+   - logo first
+   - search + icons row
+   - nav links stacked vertically
+
+   Tablet/Desktop:
+   - logo + search + icons wrap across top
+   - nav links horizontal underneath
    -------------------------------------------- */
 
-.nav {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: var(--space-md);
+.site-header {
   border-bottom: 1px solid var(--color-border);
+  background: var(--color-base);
   position: sticky;
   top: 0;
-  background: var(--color-base);
   z-index: 100;
 }
 
-.nav-logo {
+.top-header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  padding: var(--space-md) 0;
+}
+
+.logo-link {
   font-size: var(--text-lg);
   font-weight: 700;
   letter-spacing: var(--tracking-tight);
+  align-self: flex-start;
 }
 
-.nav-links {
-  display: none;
-  gap: var(--space-lg);
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.search-form {
+  flex: 1;
+}
+
+.search-input {
+  width: 100%;
+}
+
+.header-icons {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.icon-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-ink);
+  font-size: 1.25rem;
+}
+
+.site-nav {
+  padding-bottom: var(--space-md);
+}
+
+.nav-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
   list-style: none;
 }
 
-.nav-links a {
+.nav-list a {
   font-size: var(--text-sm);
   font-weight: 500;
-}
-
-.nav-actions {
-  display: flex;
-  gap: var(--space-md);
-  align-items: center;
 }
 
 /* --------------------------------------------
@@ -545,12 +584,23 @@ h3 {
     padding: 0 var(--space-lg);
   }
 
-  .nav {
-    padding: var(--space-md) var(--space-lg);
-  }
-
   .form-inline {
     flex-direction: row;
+  }
+
+  .top-header {
+    flex-direction: row;
+    align-items: center;
+    gap: var(--space-lg);
+  }
+
+  .header-actions {
+    flex-grow: 1;
+  }
+
+  .nav-list {
+    flex-direction: row;
+    gap: var(--space-md);
   }
 
   .grid-2 {
@@ -571,8 +621,8 @@ h3 {
     padding: var(--space-3xl) 0;
   }
 
-  .nav-links {
-    display: flex;
+  .nav-list {
+    gap: var(--space-lg);
   }
 
   .footer-inner {
