@@ -183,3 +183,74 @@ router.get("/search", function (req, res, next) {
     });
   });
 });
+
+router.get("/products/:slug", function (req, res, next) {
+  const productSlug = req.params.slug;
+
+  const productSql = `
+    SELECT id, name, slug, brand, description, price, image_url, published_at
+    FROM products
+    WHERE slug = ?
+      AND date(published_at) <= date('now')
+    LIMIT 1
+  `;
+
+  const navCategoriesSql = `
+    SELECT id, name, slug
+    FROM categories
+    ORDER BY name ASC
+  `;
+
+  db.get(productSql, [productSlug], (productErr, product) => {
+    if (productErr) {
+      return next(productErr);
+    }
+
+    if (!product) {
+      return res.status(404).render("error", {
+        message: "Product not found",
+        error: {},
+      });
+    }
+
+    const relatedSql = `
+      SELECT id, name, slug, brand, price, image_url, published_at
+      FROM products
+      WHERE id != ?
+        AND date(published_at) <= date('now')
+      ORDER BY date(published_at) DESC
+      LIMIT 3
+    `;
+
+    db.all(relatedSql, [product.id], (relatedErr, relatedRows) => {
+      if (relatedErr) {
+        return next(relatedErr);
+      }
+
+      const relatedProducts = relatedRows.map((item) => {
+        const publishedDate = new Date(item.published_at);
+        const now = new Date();
+        const diffInMs = now - publishedDate;
+        const diffInDays = diffInMs / (1000 * 60 * 60 * 24);
+
+        return {
+          ...item,
+          is_new: diffInDays < 7,
+        };
+      });
+
+      db.all(navCategoriesSql, [], (navErr, categories) => {
+        if (navErr) {
+          return next(navErr);
+        }
+
+        res.render("product", {
+          title: `${product.name} | KIOSK`,
+          categories,
+          product,
+          relatedProducts,
+        });
+      });
+    });
+  });
+});

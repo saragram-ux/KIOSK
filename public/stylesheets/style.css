@@ -208,6 +208,45 @@ h3 {
 }
 
 /* --------------------------------------------
+   4.1 PRODUCT DETAIL (PAGE LAYOUT)
+   Product page structure — mobile first
+   -------------------------------------------- */
+
+.product-layout {
+}
+
+.product-detail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+}
+
+.product-media {
+  width: 100%;
+}
+
+.product-image {
+  aspect-ratio: 4 / 5;
+  background: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+}
+
+.product-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.product-price {
+  font-family: var(--font-mono);
+  font-size: var(--text-lg);
+  color: var(--color-ink);
+}
+
+.product-related {
+}
+
+/* --------------------------------------------
    5. NAVIGATION
    Mobile:
    - logo first
@@ -649,6 +688,17 @@ h3 {
   .grid-2 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+
+  .product-detail {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: var(--space-xl);
+  }
+
+  .product-media,
+  .product-info {
+    flex: 1;
+  }
 }
 
 @media (min-width: 1024px) {
@@ -675,5 +725,9 @@ h3 {
 
   .grid-products {
     grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .product-detail {
+    gap: var(--space-2xl);
   }
 }

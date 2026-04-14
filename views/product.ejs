@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('partials/head') %>
+  <body>
+    <%- include('partials/header', { categories: categories }) %>
+
+    <main class="site-main">
+      <section class="section product-layout">
+        <div class="container">
+          <div class="product-detail">
+            <div class="product-media">
+              <div class="product-image"></div>
+            </div>
+
+            <div class="product-info">
+              <h1><%= product.name %></h1>
+
+              <% if (product.description) { %>
+                <p class="text-soft mt-md max-prose">
+                  <%= product.description %>
+                </p>
+              <% } %>
+
+              <p class="product-price mt-lg"><%= product.price %> SEK</p>
+
+              <div class="mt-lg">
+                <button type="button" class="btn btn-primary">Add to basket</button>
+              </div>
+
+              <p class="card-brand mt-md"><%= product.brand %></p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section product-related">
+        <div class="container">
+          <div class="section-header mb-lg">
+            <h2>Related drinks</h2>
+            <a href="/products" class="text-sm text-soft">View all &rarr;</a>
+          </div>
+
+          <div class="grid grid-products">
+            <% relatedProducts.forEach(product => { %>
+              <%- include('partials/product-card', { product: product }) %>
+            <% }) %>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <%- include('partials/footer') %>
+  </body>
+</html>
