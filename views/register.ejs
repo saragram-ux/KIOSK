@@ -2,7 +2,7 @@
 <html lang="en">
   <%- include('partials/head') %>
   <body>
-    <%- include('partials/header', { categories: categories }) %>
+    <%- include('partials/header', { categories: categories, user: locals.user }) %>
 
     <main class="site-main">
       <section class="section auth-panel">

@@ -19,12 +19,24 @@
           <a href="/favorites" class="icon-link" aria-label="Favorites">
             <i class="ph ph-heart"></i>
           </a>
+
           <a href="/basket" class="icon-link" aria-label="Basket">
             <i class="ph ph-basket"></i>
           </a>
-          <a href="/login" class="icon-link" aria-label="Log in">
-            <i class="ph ph-sign-in"></i>
-          </a>
+
+          <% if (user) { %>
+            <span class="account-link text-sm"><%= user.email %></span>
+
+            <form action="/logout" method="POST" class="logout-form">
+              <button type="submit" class="icon-link icon-button" aria-label="Log out">
+                <i class="ph ph-sign-out"></i>
+              </button>
+            </form>
+          <% } else { %>
+            <a href="/login" class="icon-link" aria-label="Log in">
+              <i class="ph ph-sign-in"></i>
+            </a>
+          <% } %>
         </div>
       </div>
     </div>

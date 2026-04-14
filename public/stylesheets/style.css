@@ -377,6 +377,22 @@ h3 {
   font-weight: 500;
 }
 
+.account-link {
+  white-space: nowrap;
+}
+
+.logout-form {
+  display: inline-flex;
+}
+
+.icon-button {
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font: inherit;
+}
+
 /* --------------------------------------------
    6. BUTTONS
    Three variants. That's the whole system.

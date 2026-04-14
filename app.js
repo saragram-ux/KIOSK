@@ -27,6 +27,11 @@ app.use(
   })
 );
 
+app.use(function (req, res, next) {
+  res.locals.user = req.session.user || null;
+  next();
+});
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
