@@ -1,0 +1,30 @@
+<!-- views/partials/hero.ejs -->
+<section class="section home-hero">
+  <div class="container">
+    <div class="hero-layout">
+      <div class="hero-media">
+        <video
+          class="hero-video"
+          autoplay
+          muted
+          loop
+          playsinline
+          preload="metadata"
+        >
+          <source src="<%= hero.videoUrl %>" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+      </div>
+
+      <div class="hero-content">
+        <h1><%= hero.title %></h1>
+        <p class="text-lg text-soft mt-md max-prose"><%= hero.description %></p>
+        <div class="mt-lg">
+          <a href="<%= hero.buttonUrl %>" class="btn btn-primary"
+            ><%= hero.buttonText %></a
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

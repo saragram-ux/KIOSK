@@ -5,19 +5,7 @@
     <%- include('partials/header', { categories: categories, user: locals.user }) %>
 
     <main class="site-main">
-      <section class="section home-hero">
-        <div class="container">
-          <p class="label mb-md">Copenhagen — Open daily</p>
-          <h1>Hydration.<br />Point of view included.</h1>
-          <p class="text-lg text-soft mt-md max-prose">
-            Seasonal ingredients, Copenhagen water, nothing unnecessary. Drinks
-            for people who know what they like.
-          </p>
-          <div class="mt-lg">
-            <a href="/products" class="btn btn-primary">See the menu</a>
-          </div>
-        </div>
-      </section>
+      <%- include('partials/hero', { hero: hero }) %>
 
       <section class="section home-products">
         <div class="container">

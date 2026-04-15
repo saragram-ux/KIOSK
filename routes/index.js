@@ -3,6 +3,15 @@ var router = express.Router();
 const db = require("../data/db");
 
 router.get("/", function (req, res, next) {
+  const hero = {
+    title: "Hydration. Point of view included.",
+    description:
+      "Seasonal ingredients, Copenhagen water, nothing unnecessary. Drinks for people who know what they like.",
+    buttonText: "See the menu",
+    buttonUrl: "/products",
+    videoUrl: "/videos/hero-video.mp4",
+  };
+  
   const productsSql = `
     SELECT id, name, slug, brand, price, image_url, published_at
     FROM products
@@ -43,6 +52,7 @@ router.get("/", function (req, res, next) {
         title: "KIOSK",
         products,
         categories,
+        hero,
       });
     });
   });

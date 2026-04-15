@@ -335,6 +335,37 @@ h3 {
 }
 
 /* --------------------------------------------
+   4.5 HERO (PAGE LAYOUT)
+   Mobile first hero with video/image media
+   -------------------------------------------- */
+
+.hero-layout {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.hero-media {
+  width: 100%;
+}
+
+.hero-video {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-alt);
+  display: block;
+}
+
+.hero-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* --------------------------------------------
    5. NAVIGATION
    Mobile:
    - logo first
@@ -789,6 +820,10 @@ h3 {
     gap: var(--space-md);
   }
 
+  .hero-video {
+    aspect-ratio: 5 / 6;
+  }
+
   .grid-2 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -846,6 +881,31 @@ h3 {
 
   .nav-list {
     gap: var(--space-lg);
+  }
+
+  .hero-layout {
+    flex-direction: row;
+    align-items: center;
+    gap: var(--space-2xl);
+  }
+
+  .hero-content,
+  .hero-media {
+    flex: 1;
+  }
+
+  .hero-content {
+    align-items: flex-start;
+    text-align: left;
+    order: 1;
+  }
+
+  .hero-media {
+    order: 2;
+  }
+
+  .hero-video {
+    aspect-ratio: 4 / 5;
   }
 
   .footer-inner {
