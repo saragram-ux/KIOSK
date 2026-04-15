@@ -11,6 +11,8 @@ router.get("/", function (req, res, next) {
     buttonUrl: "/products",
     videoUrl: "/videos/hero-video.mp4",
   };
+
+  const favoriteSlugs = req.session.favorites || [];
   
   const productsSql = `
     SELECT id, name, slug, brand, price, image_url, published_at
@@ -40,6 +42,7 @@ router.get("/", function (req, res, next) {
       return {
         ...product,
         is_new: diffInDays < 7,
+        is_favorite: favoriteSlugs.includes(product.slug),
       };
     });
 
@@ -60,6 +63,8 @@ router.get("/", function (req, res, next) {
 
 router.get("/categories/:slug", function (req, res, next) {
   const categorySlug = req.params.slug;
+
+  const favoriteSlugs = req.session.favorites || [];
 
   const categorySql = `
     SELECT id, name, slug, description
@@ -109,6 +114,7 @@ router.get("/categories/:slug", function (req, res, next) {
         return {
           ...product,
           is_new: diffInDays < 7,
+          is_favorite: favoriteSlugs.includes(product.slug),
         };
       });
 
@@ -130,6 +136,8 @@ router.get("/categories/:slug", function (req, res, next) {
 
 router.get("/search", function (req, res, next) {
   const query = req.query.q ? req.query.q.trim() : "";
+
+  const favoriteSlugs = req.session.favorites || [];
 
   const navCategoriesSql = `
     SELECT id, name, slug
@@ -174,6 +182,7 @@ router.get("/search", function (req, res, next) {
       return {
         ...product,
         is_new: diffInDays < 7,
+        is_favorite: favoriteSlugs.includes(product.slug),
       };
     });
 
@@ -194,6 +203,8 @@ router.get("/search", function (req, res, next) {
 
 router.get("/products/:slug", function (req, res, next) {
   const productSlug = req.params.slug;
+
+  const favoriteSlugs = req.session.favorites || [];
 
   const productSql = `
     SELECT id, name, slug, brand, description, price, image_url, published_at
@@ -221,6 +232,11 @@ router.get("/products/:slug", function (req, res, next) {
       });
     }
 
+    const productWithFavorite = {
+  ...product,
+  is_favorite: favoriteSlugs.includes(product.slug),
+};
+
     const relatedSql = `
       SELECT id, name, slug, brand, price, image_url, published_at
       FROM products
@@ -244,6 +260,7 @@ router.get("/products/:slug", function (req, res, next) {
         return {
           ...item,
           is_new: diffInDays < 7,
+          is_favorite: favoriteSlugs.includes(item.slug),
         };
       });
 
@@ -255,7 +272,7 @@ router.get("/products/:slug", function (req, res, next) {
         res.render("product", {
           title: `${product.name} | KIOSK`,
           categories,
-          product,
+          product: productWithFavorite,
           relatedProducts,
         });
       });
@@ -382,6 +399,96 @@ router.post("/basket/decrease/:slug", function (req, res) {
   );
 
   res.redirect("/basket");
+});
+
+router.get("/favorites", function (req, res, next) {
+  const favoriteSlugs = req.session.favorites || [];
+
+  const navCategoriesSql = `
+    SELECT id, name, slug
+    FROM categories
+    ORDER BY name ASC
+  `;
+
+  if (favoriteSlugs.length === 0) {
+    return db.all(navCategoriesSql, [], (navErr, categories) => {
+      if (navErr) {
+        return next(navErr);
+      }
+
+      res.render("favorites", {
+        title: "Favorites | KIOSK",
+        categories,
+        products: [],
+      });
+    });
+  }
+
+  const placeholders = favoriteSlugs.map(() => "?").join(",");
+
+  const favoritesSql = `
+    SELECT id, name, slug, brand, price, image_url, published_at
+    FROM products
+    WHERE slug IN (${placeholders})
+      AND date(published_at) <= date('now')
+    ORDER BY date(published_at) DESC
+  `;
+
+  db.all(favoritesSql, favoriteSlugs, (productsErr, productRows) => {
+    if (productsErr) {
+      return next(productsErr);
+    }
+
+    const products = productRows.map((product) => {
+      const publishedDate = new Date(product.published_at);
+      const now = new Date();
+      const diffInMs = now - publishedDate;
+      const diffInDays = diffInMs / (1000 * 60 * 60 * 24);
+
+      return {
+        ...product,
+        is_new: diffInDays < 7,
+        is_favorite: true,
+      };
+    });
+
+    db.all(navCategoriesSql, [], (navErr, categories) => {
+      if (navErr) {
+        return next(navErr);
+      }
+
+      res.render("favorites", {
+        title: "Favorites | KIOSK",
+        categories,
+        products,
+      });
+    });
+  });
+});
+
+router.post("/favorites/toggle/:slug", function (req, res) {
+  const productSlug = req.params.slug;
+
+  if (!req.session.favorites) {
+    req.session.favorites = [];
+  }
+
+  const isAlreadyFavorite = req.session.favorites.includes(productSlug);
+
+  if (isAlreadyFavorite) {
+    req.session.favorites = req.session.favorites.filter(
+      (slug) => slug !== productSlug
+    );
+  } else {
+    req.session.favorites.push(productSlug);
+  }
+
+  const redirectTo = req.body.redirectTo || "back";
+  if (redirectTo === "favorites") {
+    return res.redirect("/favorites");
+  }
+
+  res.redirect("back");
 });
 
 router.get("/register", function (req, res, next) {

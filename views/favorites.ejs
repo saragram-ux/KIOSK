@@ -1,0 +1,43 @@
+<!-- views/favorites.ejs -->
+ <!DOCTYPE html>
+<html lang="en">
+  <%- include('partials/head') %>
+  <body>
+    <%- include('partials/header', { categories: categories, user: locals.user }) %>
+
+    <main class="site-main">
+      <section class="section favorites-header">
+        <div class="container">
+          <p class="label mb-md">Saved</p>
+          <h1>Your favorites</h1>
+        </div>
+      </section>
+
+      <section class="section favorites-grid">
+        <div class="container">
+          <% if (products.length > 0) { %>
+            <div class="grid grid-products">
+              <% products.forEach(product => { %>
+                <%- include('partials/product-card', { product: product }) %>
+              <% }) %>
+            </div>
+          <% } else { %>
+            <div class="card-text">
+              <div class="card-body">
+                <h3>Nothing here yet</h3>
+                <p class="text-soft mt-sm">
+                  Save a few drinks and they’ll show up here.
+                </p>
+                <span class="card-count">
+                  <a href="/products">Browse drinks &rarr;</a>
+                </span>
+              </div>
+            </div>
+          <% } %>
+        </div>
+      </section>
+    </main>
+
+    <%- include('partials/footer') %>
+  </body>
+</html>

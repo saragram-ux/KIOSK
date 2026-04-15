@@ -1,23 +1,31 @@
 <!-- views/partials/product-card.ejs -->
 <article class="card">
-  <a href="/products/<%= product.slug %>" class="card-link"></a>
+  <a href="/products/<%= product.slug %>" class="card-link" aria-label="View <%= product.name %>"></a>
 
   <div class="card-image">
     <% if (product.is_new) { %>
       <span class="badge card-badge">New</span>
     <% } %>
 
-    <img src="<%= product.image_url %>" alt="<%= product.name %>" />
+    <% if (product.image_url) { %>
+      <img src="<%= product.image_url %>" alt="<%= product.name %>" />
+    <% } %>
 
-    <button class="card-favorite" aria-label="Add to favorites">
-  <i class="ph ph-heart"></i>
-</button>
+    <form action="/favorites/toggle/<%= product.slug %>" method="POST" class="card-favorite-form">
+      <button class="card-favorite" type="submit" aria-label="Toggle favorite">
+        <% if (product.is_favorite) { %>
+          <i class="ph-fill ph-heart"></i>
+        <% } else { %>
+          <i class="ph ph-heart"></i>
+        <% } %>
+      </button>
+    </form>
   </div>
 
   <div class="card-body">
     <div class="card-meta">
       <h3 class="card-title"><%= product.name %></h3>
-      <p class="card-price"><%= product.price %> kr</p>
+      <p class="card-price"><%= product.price %> SEK</p>
     </div>
     <p class="card-brand"><%= product.brand %></p>
   </div>

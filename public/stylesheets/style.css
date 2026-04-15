@@ -644,6 +644,13 @@ h3 {
   color: var(--color-ink);
 }
 
+.card-favorite-form {
+  position: absolute;
+  right: var(--space-sm);
+  bottom: var(--space-sm);
+  z-index: 2;
+}
+
 .card-body {
   padding: 0;
   display: flex;
