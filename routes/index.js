@@ -483,9 +483,10 @@ router.post("/favorites/toggle/:slug", function (req, res) {
     req.session.favorites.push(productSlug);
   }
 
-  const redirectTo = req.body.redirectTo || "back";
-  if (redirectTo === "favorites") {
-    return res.redirect("/favorites");
+  const redirectTo = req.body.redirectTo;
+
+  if (redirectTo) {
+    return res.redirect(redirectTo);
   }
 
   res.redirect("back");

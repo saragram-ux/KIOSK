@@ -30,6 +30,7 @@ app.use(
 
 app.use(function (req, res, next) {
   res.locals.user = req.session.user || null;
+  res.locals.currentUrl = req.originalUrl;
   next();
 });
 

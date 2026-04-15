@@ -1,5 +1,5 @@
 <!-- views/partials/product-card.ejs -->
-<article class="card">
+<article class="card" id="product-<%= product.id %>">
   <a href="/products/<%= product.slug %>" class="card-link" aria-label="View <%= product.name %>"></a>
 
   <div class="card-image">
@@ -11,15 +11,21 @@
       <img src="<%= product.image_url %>" alt="<%= product.name %>" />
     <% } %>
 
-    <form action="/favorites/toggle/<%= product.slug %>" method="POST" class="card-favorite-form">
-      <button class="card-favorite" type="submit" aria-label="Toggle favorite">
-        <% if (product.is_favorite) { %>
-          <i class="ph-fill ph-heart"></i>
-        <% } else { %>
-          <i class="ph ph-heart"></i>
-        <% } %>
-      </button>
-    </form>
+<form action="/favorites/toggle/<%= product.slug %>" method="POST" class="card-favorite-form">
+  <input
+    type="hidden"
+    name="redirectTo"
+    value="<%= currentUrl %>#product-<%= product.id %>"
+  />
+
+  <button class="card-favorite" type="submit" aria-label="Toggle favorite">
+    <% if (product.is_favorite) { %>
+      <i class="ph-fill ph-heart"></i>
+    <% } else { %>
+      <i class="ph ph-heart"></i>
+    <% } %>
+  </button>
+</form>
   </div>
 
   <div class="card-body">

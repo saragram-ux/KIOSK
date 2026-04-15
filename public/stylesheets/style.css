@@ -584,6 +584,7 @@ h3 {
   background: transparent;
   border: none;
   overflow: visible;
+  scroll-margin-top: 8rem;
 }
 
 .card:hover {
