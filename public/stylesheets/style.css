@@ -300,6 +300,29 @@ h3 {
 }
 
 /* --------------------------------------------
+   4.4 ADMIN (PAGE LAYOUT)
+   Admin list and form pages
+   -------------------------------------------- */
+
+.admin-layout {
+}
+
+.admin-table {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.admin-row {
+  display: grid;
+  gap: var(--space-sm);
+  padding: var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+}
+
+/* --------------------------------------------
    5. NAVIGATION
    Mobile:
    - logo first
@@ -788,6 +811,11 @@ h3 {
   .basket-quantity-value {
     min-width: 2rem;
     text-align: center;
+  }
+
+  .admin-row {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    align-items: center;
   }
 }
 

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('partials/head') %>
+  <body>
+    <main class="site-main">
+      <section class="section admin-layout">
+        <div class="container">
+          <p class="label mb-md">Administration</p>
+          <h1>Products</h1>
+
+          <div class="mt-lg">
+            <a href="/admin/products/new" class="btn btn-primary">New product</a>
+          </div>
+
+          <div class="mt-lg">
+            <% if (products.length > 0) { %>
+              <div class="admin-table">
+                <% products.forEach(product => { %>
+                  <div class="admin-row">
+                    <span><%= product.name %></span>
+                    <span><%= product.slug %></span>
+                    <span><%= product.brand %></span>
+                    <span><%= product.price %> SEK</span>
+                  </div>
+                <% }) %>
+              </div>
+            <% } else { %>
+              <p class="text-soft mt-md">No products yet.</p>
+            <% } %>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
