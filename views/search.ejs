@@ -1,10 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-  <%- include('partials/head') %>
-  <body>
-    <%- include('partials/header', { categories: categories, user: locals.user }) %>
-
-    <main class="site-main">
       <section class="section search-header">
         <div class="container">
           <p class="label mb-md">Search</p>
@@ -38,8 +31,3 @@
           <% } %>
         </div>
       </section>
-    </main>
-
-    <%- include('partials/footer') %>
-  </body>
-</html>
