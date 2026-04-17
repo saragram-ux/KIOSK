@@ -16,8 +16,8 @@
             <% if (categories.length > 0) { %>
               <div class="admin-table">
                 <% categories.forEach(category => { %>
-                  <div class="admin-row">
-                    <span><%= category.name %></span>
+                  <div class="admin-row admin-row-categories">
+                    <span><strong><%= category.name %></strong></span>
                     <span><%= category.slug %></span>
                   </div>
                 <% }) %>
