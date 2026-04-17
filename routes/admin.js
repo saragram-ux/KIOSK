@@ -458,4 +458,108 @@ router.post("/categories/new", requireAdmin, function (req, res, next) {
   );
 });
 
+router.get("/categories/:id/edit", requireAdmin, function (req, res, next) {
+  const categoryId = req.params.id;
+
+  const sql = `
+    SELECT id, name, slug, description, image_url
+    FROM categories
+    WHERE id = ?
+    LIMIT 1
+  `;
+
+  db.get(sql, [categoryId], (err, category) => {
+    if (err) return next(err);
+
+    if (!category) {
+      return res.redirect("/admin/categories");
+    }
+
+    res.render("admin-category-edit", {
+      title: "Edit Category | KIOSK",
+      category,
+      errors: {},
+      formData: category,
+    });
+  });
+});
+
+router.post("/categories/:id/edit", requireAdmin, function (req, res, next) {
+  const categoryId = req.params.id;
+
+  const { name, slug, description, image_url } = req.body;
+
+  const formData = {
+    name: name ? name.trim() : "",
+    slug: slug ? slug.trim() : "",
+    description: description ? description.trim() : "",
+    image_url: image_url ? image_url.trim() : "",
+  };
+
+  const errors = {};
+
+  if (!formData.name) errors.name = "Name is required.";
+  if (!formData.slug) errors.slug = "Slug is required.";
+
+  if (Object.keys(errors).length > 0) {
+    return res.render("admin-category-edit", {
+      title: "Edit Category | KIOSK",
+      category: { id: categoryId },
+      errors,
+      formData,
+    });
+  }
+
+  const updateSql = `
+    UPDATE categories
+    SET name = ?, slug = ?, description = ?, image_url = ?
+    WHERE id = ?
+  `;
+
+  db.run(
+    updateSql,
+    [formData.name, formData.slug, formData.description, formData.image_url, categoryId],
+    function (err) {
+      if (err) {
+        if (err.message.includes("UNIQUE")) {
+          errors.slug = "Slug already exists.";
+
+          return res.render("admin-category-edit", {
+            title: "Edit Category | KIOSK",
+            category: { id: categoryId },
+            errors,
+            formData,
+          });
+        }
+
+        return next(err);
+      }
+
+      res.redirect("/admin/categories");
+    }
+  );
+});
+
+router.post("/categories/:id/delete", requireAdmin, function (req, res, next) {
+  const categoryId = req.params.id;
+
+  db.run(
+    `DELETE FROM product_categories WHERE category_id = ?`,
+    [categoryId],
+    (relationErr) => {
+      if (relationErr) return next(relationErr);
+
+      db.run(
+        `DELETE FROM categories WHERE id = ?`,
+        [categoryId],
+        (err) => {
+          if (err) return next(err);
+
+          res.redirect("/admin/categories");
+        }
+      );
+    }
+  );
+});
+
 module.exports = router;

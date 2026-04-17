@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('partials/head') %>
+  <body>
+    <main class="site-main">
+      <section class="section admin-layout">
+        <div class="container-narrow">
+          <p class="label mb-md">Administration</p>
+          <h1>New category</h1>
+
+          <form action="/admin/categories/<%= category.id %>/edit" method="POST" class="auth-form mt-lg">
+            <div class="form-group">
+              <label for="name" class="form-label">Name</label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                class="form-input"
+                value="<%= formData.name %>"
+                required
+              />
+              <% if (errors.name) { %>
+                <p class="form-error"><%= errors.name %></p>
+              <% } %>
+            </div>
+
+            <div class="form-group mt-md">
+              <label for="slug" class="form-label">Slug</label>
+              <input
+                type="text"
+                id="slug"
+                name="slug"
+                class="form-input"
+                value="<%= formData.slug %>"
+                required
+              />
+              <% if (errors.slug) { %>
+                <p class="form-error"><%= errors.slug %></p>
+              <% } %>
+            </div>
+
+            <div class="form-group mt-md">
+              <label for="description" class="form-label">Description</label>
+              <textarea
+                id="description"
+                name="description"
+                class="form-input"
+                rows="4"
+              ><%= formData.description %></textarea>
+            </div>
+
+            <div class="form-group mt-md">
+              <label for="image_url" class="form-label">Image URL</label>
+              <input
+                type="text"
+                id="image_url"
+                name="image_url"
+                class="form-input"
+                value="<%= formData.image_url %>"
+              />
+            </div>
+
+            <div class="mt-lg">
+              <button type="submit" class="btn btn-primary">Update category</button>
+            </div>
+          </form>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
