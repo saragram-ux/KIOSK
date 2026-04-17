@@ -1,4 +1,5 @@
-<!DOCTYPE html>
+<!-- views/admin-product-edit.ejs -->
+ <!DOCTYPE html>
 <html lang="en">
   <%- include('partials/head') %>
   <body>
@@ -8,7 +9,7 @@
           <p class="label mb-md">Administration</p>
           <h1>New product</h1>
 
-          <form action="/admin/products/new" method="POST" class="auth-form mt-lg">
+          <form action="/admin/products/<%= product.id %>/edit" method="POST" class="auth-form mt-lg">
             <% if (errors.general) { %>
               <p class="form-error mb-md"><%= errors.general %></p>
             <% } %>
@@ -133,7 +134,7 @@
             </div>
 
             <div class="mt-lg">
-              <button type="submit" class="btn btn-primary">Save product</button>
+              <button type="submit" class="btn btn-primary">Update product</button>
             </div>
           </form>
         </div>
