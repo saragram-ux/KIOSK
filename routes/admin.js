@@ -169,6 +169,207 @@ router.post("/products/new", requireAdmin, function (req, res, next) {
   );
 });
 
+router.get("/products/:id/edit", requireAdmin, function (req, res, next) {
+  const productId = req.params.id;
+
+  const productSql = `
+    SELECT id, name, slug, brand, description, price, image_url, published_at
+    FROM products
+    WHERE id = ?
+    LIMIT 1
+  `;
+
+  const categoriesSql = `
+    SELECT id, name
+    FROM categories
+    ORDER BY name ASC
+  `;
+
+  db.get(productSql, [productId], (productErr, product) => {
+    if (productErr) {
+      return next(productErr);
+    }
+
+    if (!product) {
+      return res.redirect("/admin/products");
+    }
+
+    db.get(
+      `SELECT category_id FROM product_categories WHERE product_id = ? LIMIT 1`,
+      [productId],
+      (relationErr, relation) => {
+        if (relationErr) {
+          return next(relationErr);
+        }
+
+        db.all(categoriesSql, [], (categoriesErr, categories) => {
+          if (categoriesErr) {
+            return next(categoriesErr);
+          }
+
+          res.render("admin-product-edit", {
+            title: "Edit Product | KIOSK",
+            product,
+            categories,
+            errors: {},
+            formData: {
+              ...product,
+              category_id: relation ? String(relation.category_id) : "",
+            },
+          });
+        });
+      }
+    );
+  });
+});
+
+router.post("/products/:id/edit", requireAdmin, function (req, res, next) {
+  const productId = req.params.id;
+  const { name, slug, brand, description, price, image_url, published_at, category_id } = req.body;
+
+  const formData = {
+    name: name ? name.trim() : "",
+    slug: slug ? slug.trim() : "",
+    brand: brand ? brand.trim() : "",
+    description: description ? description.trim() : "",
+    price: price ? price.trim() : "",
+    image_url: image_url ? image_url.trim() : "",
+    published_at: published_at ? published_at.trim() : "",
+    category_id: category_id ? category_id.trim() : "",
+  };
+
+  const errors = {};
+
+  if (!formData.name) {
+    errors.name = "Name is required.";
+  }
+
+  if (!formData.slug) {
+    errors.slug = "Slug is required.";
+  }
+
+  if (!formData.brand) {
+    errors.brand = "Brand is required.";
+  }
+
+  if (!formData.price) {
+    errors.price = "Price is required.";
+  }
+
+  if (!formData.published_at) {
+    errors.published_at = "Publish date is required.";
+  }
+
+  if (!formData.category_id) {
+    errors.category_id = "Category is required.";
+  }
+
+  const categoriesSql = `
+    SELECT id, name
+    FROM categories
+    ORDER BY name ASC
+  `;
+
+  if (Object.keys(errors).length > 0) {
+    return db.all(categoriesSql, [], (categoriesErr, categories) => {
+      if (categoriesErr) {
+        return next(categoriesErr);
+      }
+
+      res.render("admin-product-edit", {
+        title: "Edit Product | KIOSK",
+        product: { id: productId },
+        categories,
+        errors,
+        formData,
+      });
+    });
+  }
+
+  const updateProductSql = `
+    UPDATE products
+    SET name = ?, slug = ?, brand = ?, description = ?, price = ?, image_url = ?, published_at = ?
+    WHERE id = ?
+  `;
+
+  db.run(
+    updateProductSql,
+    [
+      formData.name,
+      formData.slug,
+      formData.brand,
+      formData.description,
+      Number(formData.price),
+      formData.image_url,
+      formData.published_at,
+      productId,
+    ],
+    function (productErr) {
+      if (productErr) {
+        return db.all(categoriesSql, [], (categoriesErr, categories) => {
+          if (categoriesErr) {
+            return next(categoriesErr);
+          }
+
+          if (productErr.message.includes("UNIQUE")) {
+            errors.slug = "A product with this slug already exists.";
+          } else {
+            errors.general = "Something went wrong. Please try again.";
+          }
+
+          res.render("admin-product-edit", {
+            title: "Edit Product | KIOSK",
+            product: { id: productId },
+            categories,
+            errors,
+            formData,
+          });
+        });
+      }
+
+      db.run(
+        `DELETE FROM product_categories WHERE product_id = ?`,
+        [productId],
+        (deleteRelationErr) => {
+          if (deleteRelationErr) {
+            return next(deleteRelationErr);
+          }
+
+          db.run(
+            `INSERT INTO product_categories (product_id, category_id) VALUES (?, ?)`,
+            [productId, Number(formData.category_id)],
+            (insertRelationErr) => {
+              if (insertRelationErr) {
+                return next(insertRelationErr);
+              }
+
+              res.redirect("/admin/products");
+            }
+          );
+        }
+      );
+    }
+  );
+});
+
+router.post("/products/:id/delete", requireAdmin, function (req, res, next) {
+  const productId = req.params.id;
+
+  db.run(`DELETE FROM product_categories WHERE product_id = ?`, [productId], (relationErr) => {
+    if (relationErr) {
+      return next(relationErr);
+    }
+
+    db.run(`DELETE FROM products WHERE id = ?`, [productId], (productErr) => {
+      if (productErr) {
+        return next(productErr);
+      }
+
+      res.redirect("/admin/products");
+    });
+  });
+});
+
 router.get("/categories", requireAdmin, function (req, res, next) {
   const categoriesSql = `
     SELECT id, name, slug

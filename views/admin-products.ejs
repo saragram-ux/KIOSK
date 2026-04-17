@@ -16,12 +16,23 @@
             <% if (products.length > 0) { %>
               <div class="admin-table">
                 <% products.forEach(product => { %>
-                  <div class="admin-row">
-                    <span><%= product.name %></span>
-                    <span><%= product.slug %></span>
-                    <span><%= product.brand %></span>
-                    <span><%= product.price %> SEK</span>
-                  </div>
+                 <div class="admin-row">
+  <span><strong><%= product.name %></strong></span>
+  <span><%= product.brand %></span>
+  <span><%= product.price %> SEK</span>
+
+  <div class="admin-actions">
+    <a href="/admin/products/<%= product.id %>/edit" class="btn btn-secondary btn-sm">
+      Edit
+    </a>
+
+    <form action="/admin/products/<%= product.id %>/delete" method="POST" style="display:inline;">
+      <button type="submit" class="btn btn-secondary btn-sm">
+        Delete
+      </button>
+    </form>
+  </div>
+</div>
                 <% }) %>
               </div>
             <% } else { %>
