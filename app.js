@@ -36,6 +36,12 @@ app.use(
 app.use(function (req, res, next) {
   res.locals.user = req.session.user || null;
   res.locals.currentUrl = req.originalUrl;
+
+  const basket = req.session.basket || [];
+  res.locals.basketCount = basket.reduce((total, item) => {
+    return total + item.quantity;
+  }, 0);
+
   next();
 });
 

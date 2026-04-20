@@ -263,6 +263,17 @@ h3 {
    Basket page structure — mobile first
    -------------------------------------------- */
 
+.header-basket {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--color-ink);
+}
+
+.header-basket .text-sm {
+  line-height: 1;
+}
+
 .basket-page {
 }
 
