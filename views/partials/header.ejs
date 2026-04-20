@@ -20,9 +20,10 @@
             <i class="ph ph-heart"></i>
           </a>
 
-          <a href="/basket" class="icon-link" aria-label="Basket">
-            <i class="ph ph-basket"></i>
-          </a>
+          <a href="/basket" class="header-basket" aria-label="Basket">
+  <i class="ph ph-basket"></i>
+  <span class="text-sm">(<%= basketCount %>)</span>
+</a>
 
           <% if (user) { %>
             <span class="account-link text-sm"><%= user.email %></span>
