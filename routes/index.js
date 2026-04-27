@@ -61,6 +61,50 @@ router.get("/", function (req, res, next) {
   });
 });
 
+router.get("/news", function (req, res, next) {
+  const favoriteSlugs = req.session.favorites || [];
+
+  const navCategoriesSql = `
+    SELECT id, name, slug
+    FROM categories
+    ORDER BY name ASC
+  `;
+
+  const newsSql = `
+    SELECT id, name, slug, brand, price, image_url, published_at
+    FROM products
+    WHERE date(published_at) <= date('now')
+      AND julianday('now') - julianday(published_at) < 7
+    ORDER BY date(published_at) DESC
+  `;
+
+  db.all(newsSql, [], (productsErr, productRows) => {
+    if (productsErr) {
+      return next(productsErr);
+    }
+
+    const products = productRows.map((product) => {
+      return {
+        ...product,
+        is_new: false,
+        is_favorite: favoriteSlugs.includes(product.slug),
+      };
+    });
+
+    db.all(navCategoriesSql, [], (navErr, categories) => {
+      if (navErr) {
+        return next(navErr);
+      }
+
+      res.render("news", {
+        title: "News | KIOSK",
+        categories,
+        products,
+      });
+    });
+  });
+});
+
 router.get("/categories/:slug", function (req, res, next) {
   const categorySlug = req.params.slug;
 
@@ -279,9 +323,6 @@ router.get("/products/:slug", function (req, res, next) {
     });
   });
 });
-// --------------------------------------------
-// BASKET ROUTES
-// --------------------------------------------
 
 router.get("/basket", function (req, res, next) {
   const basket = req.session.basket || [];

@@ -1,0 +1,30 @@
+ <section class="section news-header">
+        <div class="container">
+          <p class="label mb-md">Fresh in</p>
+          <h1>News</h1>
+          <p class="text-soft mt-sm max-prose">
+            Products published during the last 7 days.
+          </p>
+        </div>
+      </section>
+
+      <section class="section news-grid">
+        <div class="container">
+          <% if (products.length > 0) { %>
+            <div class="grid grid-products">
+              <% products.forEach(product => { %>
+                <%- include('partials/product-card', { product: product, currentUrl: currentUrl }) %>
+              <% }) %>
+            </div>
+          <% } else { %>
+            <div class="card-text">
+              <div class="card-body">
+                <h3>No new products right now</h3>
+                <p class="text-soft mt-sm">
+                  Check back soon for the latest drops.
+                </p>
+              </div>
+            </div>
+          <% } %>
+        </div>
+      </section>
