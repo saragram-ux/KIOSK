@@ -245,6 +245,49 @@ router.get("/search", function (req, res, next) {
   });
 });
 
+router.get("/products", function (req, res, next) {
+  const favoriteSlugs = req.session.favorites || [];
+
+  const productsSql = `
+    SELECT id, name, slug, brand, price, image_url, published_at
+    FROM products
+    WHERE date(published_at) <= date('now')
+    ORDER BY date(published_at) DESC
+  `;
+
+  const navCategoriesSql = `
+    SELECT id, name, slug
+    FROM categories
+    ORDER BY name ASC
+  `;
+
+  db.all(productsSql, [], (productsErr, productRows) => {
+    if (productsErr) return next(productsErr);
+
+    const products = productRows.map((product) => {
+      const publishedDate = new Date(product.published_at);
+      const now = new Date();
+      const diffInDays = (now - publishedDate) / (1000 * 60 * 60 * 24);
+
+      return {
+        ...product,
+        is_new: diffInDays < 7,
+        is_favorite: favoriteSlugs.includes(product.slug),
+      };
+    });
+
+    db.all(navCategoriesSql, [], (navErr, categories) => {
+      if (navErr) return next(navErr);
+
+      res.render("products", {
+        title: "Menu | KIOSK",
+        categories,
+        products,
+      });
+    });
+  });
+});
+
 router.get("/products/:slug", function (req, res, next) {
   const productSlug = req.params.slug;
 

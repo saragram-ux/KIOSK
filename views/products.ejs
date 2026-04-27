@@ -1,0 +1,26 @@
+<section class="section page-header">
+  <div class="container">
+    <p class="label mb-md">Menu</p>
+    <h1>All drinks</h1>
+    <p class="text-soft mt-sm max-prose">
+      Everything currently available. Seasonal, fresh, and always rotating.
+    </p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <% if (products.length > 0) { %>
+      <div class="grid grid-products">
+        <% products.forEach(product => { %>
+          <%- include('partials/product-card', {
+            product: product,
+            currentUrl: currentUrl
+          }) %>
+        <% }) %>
+      </div>
+    <% } else { %>
+      <p>No products available.</p>
+    <% } %>
+  </div>
+</section>
