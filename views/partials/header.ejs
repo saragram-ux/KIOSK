@@ -1,7 +1,9 @@
 <header class="site-header">
   <div class="container">
     <div class="top-header">
-      <a href="/" class="logo-link">KIOSK</a>
+      <a href="/" class="logo-link">
+        KIOSK
+      </a>
 
       <div class="header-actions">
         <form action="/search" method="GET" class="search-form">
@@ -21,9 +23,9 @@
           </a>
 
           <a href="/basket" class="header-basket" aria-label="Basket">
-  <i class="ph ph-basket"></i>
-  <span class="text-sm">(<%= basketCount %>)</span>
-</a>
+            <i class="ph ph-basket"></i>
+            <span class="text-sm">(<%= basketCount %>)</span>
+          </a>
 
           <% if (user) { %>
             <span class="account-link text-sm"><%= user.email %></span>
@@ -44,15 +46,38 @@
 
     <nav class="site-nav" aria-label="Main navigation">
       <ul class="nav-list">
-        <li><a href="/news">New</a></li>
+      
+        <li>
+          <a
+            href="/news"
+            class="<%= currentUrl.startsWith('/news') ? 'is-active' : '' %>"
+          >
+            New
+          </a>
+        </li>
+
+        <li>
+          <a
+            href="/products"
+            class="<%= currentUrl.startsWith('/products') ? 'is-active' : '' %>"
+          >
+            Drinks
+          </a>
+        </li>
 
         <% if (typeof categories !== "undefined" && categories.length) { %>
           <% categories.forEach(category => { %>
             <li>
-              <a href="/categories/<%= category.slug %>"><%= category.name %></a>
+              <a
+                href="/categories/<%= category.slug %>"
+                class="<%= currentUrl === '/categories/' + category.slug ? 'is-active' : '' %>"
+              >
+                <%= category.name %>
+              </a>
             </li>
           <% }) %>
         <% } %>
+
       </ul>
     </nav>
   </div>

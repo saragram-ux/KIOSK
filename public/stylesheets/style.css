@@ -452,6 +452,22 @@ h3 {
 .nav-list a {
   font-size: var(--text-sm);
   font-weight: 500;
+  position: relative;
+}
+
+.nav-list a.is-active {
+  color: var(--color-ink);
+  font-weight: 700;
+}
+
+.nav-list a.is-active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -0.25rem;
+  height: 2px;
+  background: var(--color-accent);
 }
 
 .account-link {
