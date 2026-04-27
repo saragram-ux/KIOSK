@@ -2,6 +2,35 @@ const express = require("express");
 const router = express.Router();
 const db = require("../data/db");
 const requireAdmin = require("../middleware/requireAdmin");
+const multer = require("multer");
+const path = require("path");
+
+const productImageStorage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, path.join(__dirname, "../public/images/products"));
+  },
+  filename: function (req, file, cb) {
+    const uniqueName =
+      Date.now() + "-" + file.originalname.replace(/\s+/g, "-").toLowerCase();
+
+    cb(null, uniqueName);
+  },
+});
+
+const categoryImageStorage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, path.join(__dirname, "../public/images/categories"));
+  },
+  filename: function (req, file, cb) {
+    const uniqueName =
+      Date.now() + "-" + file.originalname.replace(/\s+/g, "-").toLowerCase();
+
+    cb(null, uniqueName);
+  },
+});
+
+const uploadProductImage = multer({ storage: productImageStorage });
+const uploadCategoryImage = multer({ storage: categoryImageStorage });
 
 router.get("/products", requireAdmin, function (req, res, next) {
   const productsSql = `
@@ -52,7 +81,7 @@ router.get("/products/new", requireAdmin, function (req, res, next) {
   });
 });
 
-router.post("/products/new", requireAdmin, function (req, res, next) {
+router.post("/products/new", requireAdmin, uploadProductImage.single("image"), function (req, res, next) {
   const { name, slug, brand, description, price, image_url, published_at, category_id } = req.body;
 
   const formData = {
@@ -61,7 +90,7 @@ router.post("/products/new", requireAdmin, function (req, res, next) {
     brand: brand ? brand.trim() : "",
     description: description ? description.trim() : "",
     price: price ? price.trim() : "",
-    image_url: image_url ? image_url.trim() : "",
+    image_url: req.file ? `/images/products/${req.file.filename}` : "",
     published_at: published_at ? published_at.trim() : "",
     category_id: category_id ? category_id.trim() : "",
   };
@@ -402,7 +431,7 @@ router.get("/categories/new", requireAdmin, function (req, res) {
   });
 });
 
-router.post("/categories/new", requireAdmin, function (req, res, next) {
+router.post("/categories/new", requireAdmin, uploadCategoryImage.single("image"), function (req, res, next) {
   const { name, slug, description, image_url } = req.body;
 
   const formData = {

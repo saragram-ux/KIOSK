@@ -8,7 +8,7 @@
           <p class="label mb-md">Administration</p>
           <h1>New category</h1>
 
-          <form action="/admin/categories/new" method="POST" class="auth-form mt-lg">
+          <form action="/admin/categories/new" method="POST" enctype="multipart/form-data" class="auth-form mt-lg">
             <div class="form-group">
               <label for="name" class="form-label">Name</label>
               <input
@@ -50,15 +50,15 @@
             </div>
 
             <div class="form-group mt-md">
-              <label for="image_url" class="form-label">Image URL</label>
-              <input
-                type="text"
-                id="image_url"
-                name="image_url"
-                class="form-input"
-                value="<%= formData.image_url %>"
-              />
-            </div>
+  <label for="image" class="form-label">Image</label>
+  <input
+    type="file"
+    id="image"
+    name="image"
+    class="form-input"
+    accept="image/*"
+  />
+</div>
 
             <div class="mt-lg">
               <button type="submit" class="btn btn-primary">Save category</button>
