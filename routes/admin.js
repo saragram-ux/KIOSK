@@ -252,9 +252,9 @@ router.get("/products/:id/edit", requireAdmin, function (req, res, next) {
   });
 });
 
-router.post("/products/:id/edit", requireAdmin, function (req, res, next) {
+router.post("/products/:id/edit", requireAdmin, uploadProductImage.single("image"), function (req, res, next) {
   const productId = req.params.id;
-  const { name, slug, brand, description, price, image_url, published_at, category_id } = req.body;
+  const { name, slug, brand, description, price, published_at, category_id } = req.body;
 
   const formData = {
     name: name ? name.trim() : "",
@@ -262,7 +262,6 @@ router.post("/products/:id/edit", requireAdmin, function (req, res, next) {
     brand: brand ? brand.trim() : "",
     description: description ? description.trim() : "",
     price: price ? price.trim() : "",
-    image_url: image_url ? image_url.trim() : "",
     published_at: published_at ? published_at.trim() : "",
     category_id: category_id ? category_id.trim() : "",
   };
@@ -315,6 +314,22 @@ router.post("/products/:id/edit", requireAdmin, function (req, res, next) {
     });
   }
 
+const existingProductSql = `
+  SELECT image_url
+  FROM products
+  WHERE id = ?
+  LIMIT 1
+`;
+
+db.get(existingProductSql, [productId], (existingErr, existingProduct) => {
+  if (existingErr) {
+    return next(existingErr);
+  }
+
+  const imageUrl = req.file
+    ? `/images/products/${req.file.filename}`
+    : existingProduct.image_url;
+
   const updateProductSql = `
     UPDATE products
     SET name = ?, slug = ?, brand = ?, description = ?, price = ?, image_url = ?, published_at = ?
@@ -329,7 +344,7 @@ router.post("/products/:id/edit", requireAdmin, function (req, res, next) {
       formData.brand,
       formData.description,
       Number(formData.price),
-      formData.image_url,
+      imageUrl,
       formData.published_at,
       productId,
     ],
@@ -379,6 +394,8 @@ router.post("/products/:id/edit", requireAdmin, function (req, res, next) {
       );
     }
   );
+});
+
 });
 
 router.post("/products/:id/delete", requireAdmin, function (req, res, next) {
@@ -432,13 +449,13 @@ router.get("/categories/new", requireAdmin, function (req, res) {
 });
 
 router.post("/categories/new", requireAdmin, uploadCategoryImage.single("image"), function (req, res, next) {
-  const { name, slug, description, image_url } = req.body;
+  const { name, slug, description } = req.body;
 
   const formData = {
     name: name ? name.trim() : "",
     slug: slug ? slug.trim() : "",
     description: description ? description.trim() : "",
-    image_url: image_url ? image_url.trim() : "",
+    image_url: req.file ? `/images/categories/${req.file.filename}` : "",
   };
 
   const errors = {};
@@ -513,16 +530,15 @@ router.get("/categories/:id/edit", requireAdmin, function (req, res, next) {
   });
 });
 
-router.post("/categories/:id/edit", requireAdmin, function (req, res, next) {
+router.post("/categories/:id/edit", requireAdmin, uploadCategoryImage.single("image"), function (req, res, next) {
   const categoryId = req.params.id;
 
-  const { name, slug, description, image_url } = req.body;
+  const { name, slug, description } = req.body;
 
   const formData = {
     name: name ? name.trim() : "",
     slug: slug ? slug.trim() : "",
     description: description ? description.trim() : "",
-    image_url: image_url ? image_url.trim() : "",
   };
 
   const errors = {};
@@ -539,6 +555,22 @@ router.post("/categories/:id/edit", requireAdmin, function (req, res, next) {
     });
   }
 
+  const existingCategorySql = `
+      SELECT image_url
+      FROM categories
+      WHERE id = ?
+      LIMIT 1
+    `;
+
+    db.get(existingCategorySql, [categoryId], (existingErr, existingCategory) => {
+      if (existingErr) {
+        return next(existingErr);
+      }
+
+      const imageUrl = req.file
+        ? `/images/categories/${req.file.filename}`
+        : existingCategory.image_url;
+
   const updateSql = `
     UPDATE categories
     SET name = ?, slug = ?, description = ?, image_url = ?
@@ -547,7 +579,7 @@ router.post("/categories/:id/edit", requireAdmin, function (req, res, next) {
 
   db.run(
     updateSql,
-    [formData.name, formData.slug, formData.description, formData.image_url, categoryId],
+    [formData.name, formData.slug, formData.description, imageUrl, categoryId],
     function (err) {
       if (err) {
         if (err.message.includes("UNIQUE")) {
@@ -567,6 +599,8 @@ router.post("/categories/:id/edit", requireAdmin, function (req, res, next) {
       res.redirect("/admin/categories");
     }
   );
+});
+
 });
 
 router.post("/categories/:id/delete", requireAdmin, function (req, res, next) {

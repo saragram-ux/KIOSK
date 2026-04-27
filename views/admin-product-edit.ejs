@@ -9,7 +9,7 @@
           <p class="label mb-md">Administration</p>
           <h1>New product</h1>
 
-          <form action="/admin/products/<%= product.id %>/edit" method="POST" class="auth-form mt-lg">
+          <form action="/admin/products/<%= product.id %>/edit" method="POST" enctype="multipart/form-data" class="auth-form mt-lg">
             <% if (errors.general) { %>
               <p class="form-error mb-md"><%= errors.general %></p>
             <% } %>
@@ -85,15 +85,22 @@
             </div>
 
             <div class="form-group mt-md">
-              <label for="image_url" class="form-label">Image URL</label>
-              <input
-                type="text"
-                id="image_url"
-                name="image_url"
-                class="form-input"
-                value="<%= formData.image_url %>"
-              />
-            </div>
+  <label for="image" class="form-label">Replace image</label>
+
+  <% if (formData.image_url) { %>
+    <p class="text-soft text-sm mb-md">
+      Current image: <%= formData.image_url %>
+    </p>
+  <% } %>
+
+  <input
+    type="file"
+    id="image"
+    name="image"
+    class="form-input"
+    accept="image/*"
+  />
+</div>
 
             <div class="form-group mt-md">
               <label for="published_at" class="form-label">Publish date</label>
