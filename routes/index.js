@@ -2,6 +2,39 @@ const express = require("express");
 const router = express.Router();
 const db = require("../data/db");
 
+function applyDbFavorites(req, products, next, callback) {
+  if (!req.session.user || products.length === 0) {
+    return callback(products);
+  }
+
+  const productIds = products.map((product) => product.id);
+  const placeholders = productIds.map(() => "?").join(",");
+
+  const favoritesSql = `
+    SELECT product_id
+    FROM favorites
+    WHERE user_id = ?
+      AND product_id IN (${placeholders})
+  `;
+
+  db.all(favoritesSql, [req.session.user.id, ...productIds], (err, rows) => {
+    if (err) {
+      return next(err);
+    }
+
+    const favoriteIds = rows.map((row) => row.product_id);
+
+    const productsWithFavorites = products.map((product) => {
+      return {
+        ...product,
+        is_favorite: favoriteIds.includes(product.id),
+      };
+    });
+
+    callback(productsWithFavorites);
+  });
+}
+
 router.get("/", function (req, res, next) {
   const hero = {
     title: "Hydration. Point of view included.",
@@ -42,7 +75,9 @@ router.get("/", function (req, res, next) {
       return {
         ...product,
         is_new: diffInDays < 7,
-        is_favorite: favoriteSlugs.includes(product.slug),
+        is_favorite: req.session.user
+  ? false
+  : favoriteSlugs.includes(product.slug),
       };
     });
 
@@ -51,12 +86,14 @@ router.get("/", function (req, res, next) {
         return next(categoriesErr);
       }
 
-      res.render("index", {
-        title: "KIOSK",
-        products,
-        categories,
-        hero,
-      });
+      applyDbFavorites(req, products, next, (productsWithFavorites) => {
+  res.render("index", {
+    title: "KIOSK",
+    products: productsWithFavorites,
+    categories,
+    hero,
+  });
+});
     });
   });
 });
@@ -87,7 +124,9 @@ router.get("/news", function (req, res, next) {
       return {
         ...product,
         is_new: false,
-        is_favorite: favoriteSlugs.includes(product.slug),
+        is_favorite: req.session.user
+  ? false
+  : favoriteSlugs.includes(product.slug),
       };
     });
 
@@ -96,10 +135,12 @@ router.get("/news", function (req, res, next) {
         return next(navErr);
       }
 
+      applyDbFavorites(req, products, next, (productsWithFavorites) => {
       res.render("news", {
         title: "News | KIOSK",
         categories,
-        products,
+        products: productsWithFavorites,
+      });
       });
     });
   });
@@ -158,7 +199,9 @@ router.get("/categories/:slug", function (req, res, next) {
         return {
           ...product,
           is_new: diffInDays < 7,
-          is_favorite: favoriteSlugs.includes(product.slug),
+          is_favorite: req.session.user
+  ? false
+  : favoriteSlugs.includes(product.slug),
         };
       });
 
@@ -167,11 +210,13 @@ router.get("/categories/:slug", function (req, res, next) {
           return next(navErr);
         }
 
+        applyDbFavorites(req, products, next, (productsWithFavorites) => {
         res.render("category", {
           title: `${category.name} | KIOSK`,
           category,
           categories,
-          products,
+          products: productsWithFavorites,
+        });
         });
       });
     });
@@ -190,19 +235,19 @@ router.get("/search", function (req, res, next) {
   `;
 
   if (!query) {
-    return db.all(navCategoriesSql, [], (navErr, categories) => {
-      if (navErr) {
-        return next(navErr);
-      }
+  return db.all(navCategoriesSql, [], (navErr, categories) => {
+    if (navErr) {
+      return next(navErr);
+    }
 
-      res.render("search", {
-        title: "Search | KIOSK",
-        categories,
-        query: "",
-        products: [],
-      });
+    res.render("search", {
+      title: "Search | KIOSK",
+      categories,
+      query: "",
+      products: [],
     });
-  }
+  });
+}
 
   const productsSql = `
     SELECT id, name, slug, brand, price, image_url, published_at
@@ -226,7 +271,9 @@ router.get("/search", function (req, res, next) {
       return {
         ...product,
         is_new: diffInDays < 7,
-        is_favorite: favoriteSlugs.includes(product.slug),
+        is_favorite: req.session.user
+  ? false
+  : favoriteSlugs.includes(product.slug),
       };
     });
 
@@ -235,12 +282,14 @@ router.get("/search", function (req, res, next) {
         return next(navErr);
       }
 
-      res.render("search", {
-        title: `Search: ${query} | KIOSK`,
-        categories,
-        query,
-        products,
-      });
+      applyDbFavorites(req, products, next, (productsWithFavorites) => {
+  res.render("search", {
+    title: `Search: ${query} | KIOSK`,
+    categories,
+    query,
+    products: productsWithFavorites,
+  });
+});
     });
   });
 });
@@ -272,18 +321,22 @@ router.get("/products", function (req, res, next) {
       return {
         ...product,
         is_new: diffInDays < 7,
-        is_favorite: favoriteSlugs.includes(product.slug),
+        is_favorite: req.session.user
+  ? false
+  : favoriteSlugs.includes(product.slug),
       };
     });
 
     db.all(navCategoriesSql, [], (navErr, categories) => {
       if (navErr) return next(navErr);
 
-      res.render("products", {
-        title: "Menu | KIOSK",
-        categories,
-        products,
-      });
+      applyDbFavorites(req, products, next, (productsWithFavorites) => {
+  res.render("products", {
+    title: "Menu | KIOSK",
+    categories,
+    products: productsWithFavorites,
+  });
+});
     });
   });
 });
@@ -321,7 +374,9 @@ router.get("/products/:slug", function (req, res, next) {
 
     const productWithFavorite = {
   ...product,
-  is_favorite: favoriteSlugs.includes(product.slug),
+  is_favorite: req.session.user
+    ? false
+    : favoriteSlugs.includes(product.slug),
 };
 
     const relatedSql = `
@@ -347,7 +402,9 @@ router.get("/products/:slug", function (req, res, next) {
         return {
           ...item,
           is_new: diffInDays < 7,
-          is_favorite: favoriteSlugs.includes(item.slug),
+          is_favorite: req.session.user
+  ? false
+  : favoriteSlugs.includes(item.slug),
         };
       });
 
@@ -356,12 +413,14 @@ router.get("/products/:slug", function (req, res, next) {
           return next(navErr);
         }
 
-        res.render("product", {
-          title: `${product.name} | KIOSK`,
-          categories,
-          product: productWithFavorite,
-          relatedProducts,
-        });
+        applyDbFavorites(req, relatedProducts, next, (relatedProductsWithFavorites) => {
+  res.render("product", {
+    title: `${product.name} | KIOSK`,
+    categories,
+    product: productWithFavorite,
+    relatedProducts: relatedProductsWithFavorites,
+  });
+});
       });
     });
   });
@@ -494,6 +553,47 @@ router.get("/favorites", function (req, res, next) {
     ORDER BY name ASC
   `;
 
+if (req.session.user) {
+  const favoritesSql = `
+    SELECT p.id, p.name, p.slug, p.brand, p.price, p.image_url, p.published_at
+    FROM favorites f
+    INNER JOIN products p ON f.product_id = p.id
+    WHERE f.user_id = ?
+      AND date(p.published_at) <= date('now')
+    ORDER BY date(p.published_at) DESC
+  `;
+
+  return db.all(favoritesSql, [req.session.user.id], (productsErr, productRows) => {
+    if (productsErr) {
+      return next(productsErr);
+    }
+
+    const products = productRows.map((product) => {
+      const publishedDate = new Date(product.published_at);
+      const now = new Date();
+      const diffInDays = (now - publishedDate) / (1000 * 60 * 60 * 24);
+
+      return {
+        ...product,
+        is_new: diffInDays < 7,
+        is_favorite: true,
+      };
+    });
+
+    db.all(navCategoriesSql, [], (navErr, categories) => {
+      if (navErr) {
+        return next(navErr);
+      }
+
+      res.render("favorites", {
+        title: "Favorites | KIOSK",
+        categories,
+        products,
+      });
+    });
+  });
+}
+
   if (favoriteSlugs.length === 0) {
     return db.all(navCategoriesSql, [], (navErr, categories) => {
       if (navErr) {
@@ -550,30 +650,74 @@ router.get("/favorites", function (req, res, next) {
   });
 });
 
-router.post("/favorites/toggle/:slug", function (req, res) {
+router.post("/favorites/toggle/:slug", function (req, res, next) {
   const productSlug = req.params.slug;
+  const redirectTo = req.body.redirectTo || "back";
 
-  if (!req.session.favorites) {
-    req.session.favorites = [];
-  }
+  const productSql = `
+    SELECT id, slug
+    FROM products
+    WHERE slug = ?
+    LIMIT 1
+  `;
 
-  const isAlreadyFavorite = req.session.favorites.includes(productSlug);
+  db.get(productSql, [productSlug], (err, product) => {
+    if (err) return next(err);
+    if (!product) return res.redirect("back");
 
-  if (isAlreadyFavorite) {
-    req.session.favorites = req.session.favorites.filter(
-      (slug) => slug !== productSlug
-    );
-  } else {
-    req.session.favorites.push(productSlug);
-  }
+    // 🔒 CASE 1: NOT LOGGED IN → SESSION
+    if (!req.session.user) {
+      if (!req.session.favorites) {
+        req.session.favorites = [];
+      }
 
-  const redirectTo = req.body.redirectTo;
+      const isFavorite = req.session.favorites.includes(product.slug);
 
-  if (redirectTo) {
-    return res.redirect(redirectTo);
-  }
+      if (isFavorite) {
+        req.session.favorites = req.session.favorites.filter(
+          (slug) => slug !== product.slug
+        );
+      } else {
+        req.session.favorites.push(product.slug);
+      }
 
-  res.redirect("back");
+      return res.redirect(redirectTo);
+    }
+
+    // 🔒 CASE 2: LOGGED IN → DATABASE
+    const userId = req.session.user.id;
+
+    const checkSql = `
+      SELECT id FROM favorites
+      WHERE user_id = ? AND product_id = ?
+    `;
+
+    db.get(checkSql, [userId, product.id], (checkErr, existing) => {
+      if (checkErr) return next(checkErr);
+
+      if (existing) {
+        // remove favorite
+        db.run(
+          `DELETE FROM favorites WHERE id = ?`,
+          [existing.id],
+          (deleteErr) => {
+            if (deleteErr) return next(deleteErr);
+            return res.redirect(redirectTo);
+          }
+        );
+      } else {
+        // add favorite
+        db.run(
+          `INSERT INTO favorites (user_id, product_id) VALUES (?, ?)`,
+          [userId, product.id],
+          (insertErr) => {
+            if (insertErr) return next(insertErr);
+            return res.redirect(redirectTo);
+          }
+        );
+      }
+    });
+  });
 });
 
 router.get("/register", function (req, res, next) {
