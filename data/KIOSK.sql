@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS favorites;
 DROP TABLE IF EXISTS product_categories;
 DROP TABLE IF EXISTS products;
 DROP TABLE IF EXISTS categories;
@@ -35,6 +36,13 @@ CREATE TABLE product_categories (
   PRIMARY KEY (product_id, category_id),
   FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE,
   FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE
+);
+
+CREATE TABLE favorites (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER NOT NULL,
+  product_id INTEGER NOT NULL,
+  UNIQUE(user_id, product_id)
 );
 
 INSERT INTO categories (name, slug, description, image_url) VALUES
