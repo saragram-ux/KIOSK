@@ -45,6 +45,24 @@
             </div>
 
             <div class="form-group mt-md">
+  <label for="sku" class="form-label">SKU</label>
+  <input
+    type="text"
+    id="sku"
+    name="sku"
+    class="form-input"
+    value="<%= formData.sku %>"
+    pattern="[A-Z]{3}[0-9]{3}"
+    title="Use format ABC123"
+    placeholder="ABC123"
+    required
+  />
+  <% if (errors.sku) { %>
+    <p class="form-error"><%= errors.sku %></p>
+  <% } %>
+</div>
+
+            <div class="form-group mt-md">
               <label for="brand" class="form-label">Brand</label>
               <input
                 type="text"
