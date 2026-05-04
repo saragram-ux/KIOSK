@@ -207,6 +207,10 @@ h3 {
 .home-signup {
 }
 
+.home-spots {
+  display: none;
+}
+
 /* --------------------------------------------
    4.1 PRODUCT DETAIL (PAGE LAYOUT)
    Product page structure — mobile first
@@ -963,6 +967,53 @@ h3 {
 
   .hero-video {
     aspect-ratio: 4 / 5;
+  }
+
+  .home-spots {
+    display: block;
+  }
+
+  .spots-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-lg);
+  }
+
+  .spot-card {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    border-radius: 8px;
+  }
+
+  .spot-image {
+    width: 100%;
+    height: 320px;
+    object-fit: cover;
+    display: block;
+  }
+
+  .spot-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: flex-end;
+    padding: var(--space-md);
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0));
+  }
+
+  .spot-title {
+    color: white;
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+
+  .spot-card:hover .spot-image {
+    transform: scale(1.03);
+  }
+
+  .spot-image {
+    transition: transform 0.4s ease;
   }
 
   .footer-inner {

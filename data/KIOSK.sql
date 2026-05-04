@@ -1,5 +1,6 @@
 DROP TABLE IF EXISTS favorites;
 DROP TABLE IF EXISTS product_categories;
+DROP TABLE IF EXISTS spots;
 DROP TABLE IF EXISTS products;
 DROP TABLE IF EXISTS categories;
 DROP TABLE IF EXISTS users;
@@ -39,6 +40,14 @@ CREATE TABLE product_categories (
   FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE
 );
 
+CREATE TABLE spots (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  title TEXT NOT NULL,
+  image_url TEXT NOT NULL,
+  link_url TEXT NOT NULL,
+  sort_order INTEGER NOT NULL DEFAULT 0
+);
+
 CREATE TABLE favorites (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   user_id INTEGER NOT NULL,
@@ -76,3 +85,8 @@ INSERT INTO product_categories (product_id, category_id) VALUES
   (7, 4),
   (8, 1),
   (8, 2);
+
+  INSERT INTO spots (title, image_url, link_url, sort_order) VALUES
+  ('Cucumber + Yuzu', '/images/spots/cucumber.webp', '/products/cucumber-yuzu-sea-salt', 1),
+  ('Strawberry Basil', '/images/spots/strawberry.webp', '/products/strawberry-basil', 2),
+  ('Grapefruit Tonic', '/images/spots/grapefruit.webp', '/products/grapefruit-tonic', 3);
