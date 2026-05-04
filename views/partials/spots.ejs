@@ -1,0 +1,14 @@
+<section class="section home-spots">
+  <div class="container">
+    <div class="spots-grid">
+      <% spots.forEach(spot => { %>
+        <a href="<%= spot.link_url %>" class="spot-card">
+          <img src="<%= spot.image_url %>" alt="<%= spot.title %>" class="spot-image" />
+          <div class="spot-overlay">
+            <h2 class="spot-title"><%= spot.title %></h2>
+          </div>
+        </a>
+      <% }) %>
+    </div>
+  </div>
+</section>

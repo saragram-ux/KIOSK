@@ -61,6 +61,13 @@ router.get("/", function (req, res, next) {
     ORDER BY name ASC
   `;
 
+  const spotsSql = `
+  SELECT id, title, image_url, link_url
+  FROM spots
+  ORDER BY sort_order ASC
+  LIMIT 3
+`;
+
   db.all(productsSql, [], (productsErr, productRows) => {
     if (productsErr) {
       return next(productsErr);
@@ -86,12 +93,19 @@ router.get("/", function (req, res, next) {
         return next(categoriesErr);
       }
 
-      applyDbFavorites(req, products, next, (productsWithFavorites) => {
-  res.render("index", {
-    title: "KIOSK",
-    products: productsWithFavorites,
-    categories,
-    hero,
+      db.all(spotsSql, [], (spotsErr, spots) => {
+  if (spotsErr) {
+    return next(spotsErr);
+  }
+
+  applyDbFavorites(req, products, next, (productsWithFavorites) => {
+    res.render("index", {
+      title: "KIOSK",
+      products: productsWithFavorites,
+      categories,
+      hero,
+      spots,
+    });
   });
 });
     });
