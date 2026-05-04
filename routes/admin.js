@@ -34,7 +34,7 @@ const uploadCategoryImage = multer({ storage: categoryImageStorage });
 
 router.get("/products", requireAdmin, function (req, res, next) {
   const productsSql = `
-    SELECT id, name, slug, brand, price
+    SELECT id, name, slug, sku, brand, price
     FROM products
     ORDER BY name ASC
   `;
@@ -70,6 +70,7 @@ router.get("/products/new", requireAdmin, function (req, res, next) {
       formData: {
         name: "",
         slug: "",
+        sku: "",
         brand: "",
         description: "",
         price: "",
@@ -82,11 +83,12 @@ router.get("/products/new", requireAdmin, function (req, res, next) {
 });
 
 router.post("/products/new", requireAdmin, uploadProductImage.single("image"), function (req, res, next) {
-  const { name, slug, brand, description, price, image_url, published_at, category_id } = req.body;
+  const { name, slug, sku, brand, description, price, image_url, published_at, category_id } = req.body;
 
   const formData = {
     name: name ? name.trim() : "",
     slug: slug ? slug.trim() : "",
+    sku: sku ? sku.trim().toUpperCase() : "",
     brand: brand ? brand.trim() : "",
     description: description ? description.trim() : "",
     price: price ? price.trim() : "",
@@ -104,6 +106,12 @@ router.post("/products/new", requireAdmin, uploadProductImage.single("image"), f
   if (!formData.slug) {
     errors.slug = "Slug is required.";
   }
+
+  if (!formData.sku) {
+  errors.sku = "SKU is required.";
+} else if (!/^[A-Z]{3}[0-9]{3}$/.test(formData.sku)) {
+  errors.sku = "SKU must use format ABC123.";
+}
 
   if (!formData.brand) {
     errors.brand = "Brand is required.";
@@ -143,15 +151,16 @@ router.post("/products/new", requireAdmin, uploadProductImage.single("image"), f
   }
 
   const insertProductSql = `
-    INSERT INTO products (name, slug, brand, description, price, image_url, published_at)
-    VALUES (?, ?, ?, ?, ?, ?, ?)
-  `;
+  INSERT INTO products (name, slug, sku, brand, description, price, image_url, published_at)
+  VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+`;
 
   db.run(
     insertProductSql,
     [
       formData.name,
       formData.slug,
+      formData.sku,
       formData.brand,
       formData.description,
       Number(formData.price),
@@ -168,7 +177,7 @@ router.post("/products/new", requireAdmin, uploadProductImage.single("image"), f
           if (productErr.message.includes("UNIQUE")) {
             errors.slug = "A product with this slug already exists.";
           } else {
-            errors.general = "Something went wrong. Please try again.";
+            errors.general = "A product with this slug or SKU already exists.";
           }
 
           res.render("admin-product-new", {
@@ -202,7 +211,7 @@ router.get("/products/:id/edit", requireAdmin, function (req, res, next) {
   const productId = req.params.id;
 
   const productSql = `
-    SELECT id, name, slug, brand, description, price, image_url, published_at
+    SELECT id, name, slug, sku, brand, description, price, image_url, published_at
     FROM products
     WHERE id = ?
     LIMIT 1
@@ -254,11 +263,12 @@ router.get("/products/:id/edit", requireAdmin, function (req, res, next) {
 
 router.post("/products/:id/edit", requireAdmin, uploadProductImage.single("image"), function (req, res, next) {
   const productId = req.params.id;
-  const { name, slug, brand, description, price, published_at, category_id } = req.body;
+  const { name, slug, sku, brand, description, price, published_at, category_id } = req.body;
 
   const formData = {
     name: name ? name.trim() : "",
     slug: slug ? slug.trim() : "",
+    sku: sku ? sku.trim().toUpperCase() : "",
     brand: brand ? brand.trim() : "",
     description: description ? description.trim() : "",
     price: price ? price.trim() : "",
@@ -275,6 +285,12 @@ router.post("/products/:id/edit", requireAdmin, uploadProductImage.single("image
   if (!formData.slug) {
     errors.slug = "Slug is required.";
   }
+
+  if (!formData.sku) {
+  errors.sku = "SKU is required.";
+} else if (!/^[A-Z]{3}[0-9]{3}$/.test(formData.sku)) {
+  errors.sku = "SKU must use format ABC123.";
+}
 
   if (!formData.brand) {
     errors.brand = "Brand is required.";
@@ -332,7 +348,7 @@ db.get(existingProductSql, [productId], (existingErr, existingProduct) => {
 
   const updateProductSql = `
     UPDATE products
-    SET name = ?, slug = ?, brand = ?, description = ?, price = ?, image_url = ?, published_at = ?
+    SET name = ?, slug = ?, sku = ?, brand = ?, description = ?, price = ?, image_url = ?, published_at = ?
     WHERE id = ?
   `;
 
@@ -341,6 +357,7 @@ db.get(existingProductSql, [productId], (existingErr, existingProduct) => {
     [
       formData.name,
       formData.slug,
+      formData.sku,
       formData.brand,
       formData.description,
       Number(formData.price),
@@ -358,7 +375,7 @@ db.get(existingProductSql, [productId], (existingErr, existingProduct) => {
           if (productErr.message.includes("UNIQUE")) {
             errors.slug = "A product with this slug already exists.";
           } else {
-            errors.general = "Something went wrong. Please try again.";
+            errors.general = "A product with this slug or SKU already exists.";
           }
 
           res.render("admin-product-edit", {

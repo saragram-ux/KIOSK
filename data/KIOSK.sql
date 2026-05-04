@@ -23,6 +23,7 @@ CREATE TABLE products (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   name TEXT NOT NULL,
   slug TEXT NOT NULL UNIQUE,
+  sku TEXT NOT NULL UNIQUE,
   brand TEXT NOT NULL,
   description TEXT,
   price INTEGER NOT NULL,
@@ -51,15 +52,15 @@ INSERT INTO categories (name, slug, description, image_url) VALUES
   ('Staples', 'staples', 'The ones you order every time. No explanation needed.', '/images/categories/staples.jpg'),
   ('Seasonal', 'seasonal', 'Limited. Ingredient-led. Here and then gone.', '/images/categories/seasonal.jpg');
 
-INSERT INTO products (name, slug, brand, description, price, image_url, published_at) VALUES
-  ('Cucumber + Yuzu + Sea Salt', 'cucumber-yuzu-sea-salt', 'KIOSK', 'Light, clean, slightly unexpected.', 49, '/images/products/cucumber-yuzu-sea-salt.webp', '2026-04-10'),
-  ('Watermelon Rooibos', 'watermelon-rooibos', 'KIOSK', 'Sweet without trying. Summer in a bottle.', 45, '/images/products/watermelon-rooibos.webp', '2026-03-28'),
-  ('Ginger Lemonade No. 3', 'ginger-lemonade-no-3', 'KIOSK', 'The third attempt was the one. Sharp, balanced, perfect.', 52, '/images/products/ginger-lemonade-no-3.webp', '2026-04-12'),
-  ('The Weekday', 'the-weekday', 'KIOSK', 'Your daily. Simple, reliable, unreasonably good.', 39, '/images/products/the-weekday.webp', '2026-02-18'),
-  ('Sunday Morning', 'sunday-morning', 'KIOSK', 'A slow-sip botanical for late starts and soft landings.', 55, '/images/products/sunday-morning.webp', '2026-04-13'),
-  ('Pear + Sea Salt', 'pear-sea-salt', 'KIOSK', 'Quiet, crisp, a little strange in the best way.', 51, '/images/products/pear-sea-salt.webp', '2026-03-21'),
-  ('Strawberry Basil', 'strawberry-basil', 'KIOSK', 'Green, juicy, and gone before you are ready.', 53, '/images/products/strawberry-basil.webp', '2026-04-08'),
-  ('Grapefruit Tonic', 'grapefruit-tonic', 'KIOSK', 'Bitter in the best way.', 48, '/images/products/grapefruit-tonic.webp', '2026-01-30');
+INSERT INTO products (name, slug, sku, brand, description, price, image_url, published_at) VALUES
+  ('Cucumber + Yuzu + Sea Salt', 'cucumber-yuzu-sea-salt', 'CUY001', 'KIOSK', 'Light, clean, slightly unexpected.', 49, '/images/products/cucumber-yuzu-sea-salt.webp', '2026-04-10'),
+  ('Watermelon Rooibos', 'watermelon-rooibos', 'WAR002', 'KIOSK', 'Sweet without trying. Summer in a bottle.', 45, '/images/products/watermelon-rooibos.webp', '2026-03-28'),
+  ('Ginger Lemonade No. 3', 'ginger-lemonade-no-3', 'GIN003', 'KIOSK', 'The third attempt was the one. Sharp, balanced, perfect.', 52, '/images/products/ginger-lemonade-no-3.webp', '2026-04-12'),
+  ('The Weekday', 'the-weekday', 'WEE004', 'KIOSK', 'Your daily. Simple, reliable, unreasonably good.', 39, '/images/products/the-weekday.webp', '2026-02-18'),
+  ('Sunday Morning', 'sunday-morning', 'SUN005', 'KIOSK', 'A slow-sip botanical for late starts and soft landings.', 55, '/images/products/sunday-morning.webp', '2026-04-13'),
+  ('Pear + Sea Salt', 'pear-sea-salt', 'PEA006', 'KIOSK', 'Quiet, crisp, a little strange in the best way.', 51, '/images/products/pear-sea-salt.webp', '2026-03-21'),
+  ('Strawberry Basil', 'strawberry-basil', 'STB007', 'KIOSK', 'Green, juicy, and gone before you are ready.', 53, '/images/products/strawberry-basil.webp', '2026-04-08'),
+  ('Grapefruit Tonic', 'grapefruit-tonic', 'GRT008', 'KIOSK', 'Bitter in the best way.', 48, '/images/products/grapefruit-tonic.webp', '2026-01-30');
 
 INSERT INTO product_categories (product_id, category_id) VALUES
   (1, 1),
