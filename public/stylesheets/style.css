@@ -789,33 +789,64 @@ h3 {
    11. FOOTER
    -------------------------------------------- */
 
-.footer {
+.usp-section {
   border-top: 1px solid var(--color-border);
-  padding: var(--space-2xl) 0;
-  color: var(--color-ink-soft);
-  font-size: var(--text-sm);
+  padding: var(--space-lg) 0;
 }
 
-.footer-inner {
-  display: flex;
-  flex-direction: column;
-  align-items: start;
-  gap: var(--space-xl);
-  flex-wrap: wrap;
+.usp-grid {
+  display: grid;
+  gap: var(--space-md);
 }
 
-.footer-col {
+.usp-item {
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+  color: var(--color-ink);
+}
+
+.usp-item i {
+  font-size: 2rem;
+}
+
+.site-footer {
+  border-top: 1px solid var(--color-border);
+  padding: var(--space-lg) 0;
+}
+
+.footer-grid {
+  display: grid;
   gap: var(--space-sm);
 }
 
-.footer-col a {
-  color: var(--color-ink-soft);
+.footer-group {
+  border-bottom: 1px solid var(--color-border);
+  padding: var(--space-sm) 0;
 }
 
-.footer-col a:hover {
-  color: var(--color-ink);
+.footer-group summary {
+  cursor: pointer;
+  font-weight: 600;
+  list-style: none;
+}
+
+.footer-group summary::-webkit-details-marker {
+  display: none;
+}
+
+.footer-group ul {
+  list-style: none;
+  padding: var(--space-sm) 0 0;
+  margin: 0;
+  display: grid;
+  gap: var(--space-xs);
+}
+
+.footer-copy {
+  text-align: center;
+  margin-top: var(--space-lg);
+  color: var(--color-muted);
 }
 
 /* --------------------------------------------
@@ -925,6 +956,30 @@ h3 {
     grid-template-columns: 2fr 1fr 1fr 1fr auto;
     align-items: center;
   }
+
+  .usp-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .footer-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-xl);
+  }
+
+  .footer-group {
+    border-bottom: 0;
+    padding: 0;
+  }
+
+  .footer-group[open] ul,
+  .footer-group ul {
+    display: grid;
+  }
+
+  .footer-group summary {
+    cursor: default;
+    pointer-events: none;
+  }
 }
 
 @media (min-width: 1024px) {
@@ -1027,5 +1082,9 @@ h3 {
 
   .product-detail {
     gap: var(--space-2xl);
+  }
+
+  .usp-grid {
+    grid-template-columns: repeat(4, 1fr);
   }
 }

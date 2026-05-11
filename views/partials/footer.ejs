@@ -1,32 +1,35 @@
-<!-- views/partials/footer.ejs -->
-<footer class="footer">
+<footer class="site-footer">
   <div class="container">
-    <div class="footer-inner">
-      <div class="footer-col">
-        <strong>KIOSK</strong>
-        <span>Copenhagen, Denmark</span>
-        <span>&copy; 2026</span>
-      </div>
+    <div class="footer-grid">
+      <details class="footer-group" open>
+        <summary>Shop</summary>
+        <ul>
+          <li><a href="/products">All drinks</a></li>
+          <li><a href="/news">New drops</a></li>
+          <li><a href="/categories/citrus">Citrus</a></li>
+          <li><a href="/categories/botanicals">Botanicals</a></li>
+        </ul>
+      </details>
 
-      <div class="footer-col">
-        <span class="label">Menu</span>
-        <a href="/products">All drinks</a>
-        <a href="/categories">Categories</a>
-        <a href="/about">About</a>
-      </div>
+      <details class="footer-group">
+        <summary>Account</summary>
+        <ul>
+          <li><a href="/login">Log in</a></li>
+          <li><a href="/favorites">Favorites</a></li>
+          <li><a href="/basket">Basket</a></li>
+        </ul>
+      </details>
 
-      <div class="footer-col">
-        <span class="label">Account</span>
-        <a href="/login">Log in</a>
-        <a href="/register">Create account</a>
-        <a href="/favorites">Favorites</a>
-      </div>
-
-      <div class="footer-col">
-        <span class="label">Admin</span>
-        <a href="/admin/products">Manage products</a>
-        <a href="/admin/categories">Manage categories</a>
-      </div>
+      <details class="footer-group">
+        <summary>Help</summary>
+        <ul>
+          <li><a href="#">Delivery</a></li>
+          <li><a href="#">Returns</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </details>
     </div>
+
+    <p class="footer-copy">© KIOSK</p>
   </div>
 </footer>
