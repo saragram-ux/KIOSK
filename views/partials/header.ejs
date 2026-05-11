@@ -19,8 +19,12 @@
 
         <div class="header-icons">
           <a href="/favorites" class="icon-link" aria-label="Favorites">
-            <i class="ph ph-heart"></i>
-          </a>
+  <% if (hasFavorites) { %>
+    <i class="ph-fill ph-heart"></i>
+  <% } else { %>
+    <i class="ph ph-heart"></i>
+  <% } %>
+</a>
 
           <a href="/basket" class="header-basket" aria-label="Basket">
             <i class="ph ph-basket"></i>

@@ -5,6 +5,8 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const session = require('express-session');
 
+const db = require('./data/db');
+
 const expressLayouts = require('express-ejs-layouts');
 
 const indexRouter = require('./routes/index');
@@ -42,7 +44,31 @@ app.use(function (req, res, next) {
     return total + item.quantity;
   }, 0);
 
+  if (!req.session.user) {
+    const favorites = req.session.favorites || [];
+    res.locals.favoriteCount = favorites.length;
+    res.locals.hasFavorites = favorites.length > 0;
+    return next();
+  }
+
+  const favoritesSql = `
+    SELECT COUNT(*) AS count
+    FROM favorites
+    WHERE user_id = ?
+  `;
+
+  db.get(favoritesSql, [req.session.user.id], (err, row) => {
+    if (err) {
+      return next(err);
+    }
+
+    res.locals.favoriteCount = row.count;
+    res.locals.hasFavorites = row.count > 0;
+
+
   next();
+});
+
 });
 
 app.use(express.static(path.join(__dirname, 'public')));
