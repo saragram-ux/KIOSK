@@ -6,11 +6,29 @@
   <% if (product.image_url) { %>
     <img src="<%= product.image_url %>" alt="<%= product.name %> can" />
   <% } %>
+
+  <form
+    action="/favorites/toggle/<%= product.slug %>"
+    method="POST"
+    class="card-favorite-form"
+  >
+    <input type="hidden" name="redirectTo" value="<%= currentUrl %>" />
+
+    <button class="card-favorite" type="submit" aria-label="Toggle favorite">
+      <% if (product.is_favorite) { %>
+        <i class="ph-fill ph-heart"></i>
+      <% } else { %>
+        <i class="ph ph-heart"></i>
+      <% } %>
+    </button>
+  </form>
 </div>
             </div>
 
             <div class="product-info">
               <h1><%= product.name %></h1>
+
+              <p class="card-brand"><%= product.brand %></p>
 
               <% if (product.description) { %>
                 <p class="text-soft mt-md max-prose">
@@ -26,7 +44,6 @@
 </form>
               </div>
 
-              <p class="card-brand mt-md"><%= product.brand %></p>
             </div>
           </div>
         </div>
@@ -39,10 +56,24 @@
             <a href="/products" class="text-sm text-soft">View all &rarr;</a>
           </div>
 
-          <div class="grid grid-products">
-            <% relatedProducts.forEach(product => { %>
-              <%- include('partials/product-card', { product: product, currentUrl: currentUrl }) %>
-            <% }) %>
-          </div>
+          <div class="related-slider">
+  <button class="related-slider-button related-slider-prev" type="button" aria-label="Previous related products">
+    <i class="ph ph-caret-left"></i>
+  </button>
+
+  <div class="related-slider-track">
+    <% relatedProducts.forEach(product => { %>
+      <div class="related-slider-item">
+        <%- include('partials/product-card', { product: product, currentUrl: currentUrl }) %>
+      </div>
+    <% }) %>
+  </div>
+
+  <button class="related-slider-button related-slider-next" type="button" aria-label="Next related products">
+    <i class="ph ph-caret-right"></i>
+  </button>
+</div>
         </div>
       </section>
+
+<script src="/javascripts/related-slider.js"></script>
