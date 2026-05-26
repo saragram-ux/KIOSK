@@ -561,6 +561,29 @@ router.post("/basket/decrease/:slug", function (req, res) {
   res.redirect("/basket");
 });
 
+router.post("/basket/update/:slug", function (req, res) {
+  if (!req.session.basket) {
+    return res.redirect("/basket");
+  }
+
+  const quantity = Number(req.body.quantity);
+
+  req.session.basket = req.session.basket
+    .map((item) => {
+      if (item.slug === req.params.slug) {
+        return {
+          ...item,
+          quantity,
+        };
+      }
+
+      return item;
+    })
+    .filter((item) => item.quantity > 0);
+
+  res.redirect("/basket");
+});
+
 router.get("/favorites", function (req, res, next) {
   const favoriteSlugs = req.session.favorites || [];
 
