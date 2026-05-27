@@ -1,44 +1,94 @@
 <!DOCTYPE html>
 <html lang="en">
   <%- include('partials/head') %>
+
   <body>
-    <main class="site-main">
-      <section class="section admin-layout">
-        <div class="container">
-          <p class="label mb-md">Administration</p>
-          <h1>Products</h1>
-
-          <div class="mt-lg">
-            <a href="/admin/products/new" class="btn btn-primary">New product</a>
+    <main class="site-main admin-site-main">
+      <section class="admin-page">
+        <div class="admin-header">
+          <div class="container">
+            <p class="admin-label">Administration</p>
           </div>
+        </div>
 
-          <div class="mt-lg">
-            <% if (products.length > 0) { %>
-              <div class="admin-table">
-                <% products.forEach(product => { %>
-                 <div class="admin-row">
-  <span><strong><%= product.name %></strong></span>
-  <span class="text-soft"><%= product.sku %></span>
-  <span><%= product.brand %></span>
-  <span><%= product.price %> SEK</span>
+        <div class="container">
+          <div class="admin-shell">
+            <%- include('partials/admin-sidebar') %>
 
-  <div class="admin-actions">
-    <a href="/admin/products/<%= product.id %>/edit" class="btn btn-secondary btn-sm">
-      Edit
-    </a>
+            <div class="admin-main">
+              <div class="admin-main-header">
+                <div>
+                  <p class="label mb-md">Products</p>
+                  <h1>Products</h1>
+                </div>
 
-    <form action="/admin/products/<%= product.id %>/delete" method="POST" style="display:inline;">
-      <button type="submit" class="btn btn-secondary btn-sm">
-        Delete
-      </button>
-    </form>
-  </div>
-</div>
-                <% }) %>
+                <a href="/admin/products/new" class="btn btn-primary">
+                  New product
+                </a>
               </div>
-            <% } else { %>
-              <p class="text-soft mt-md">No products yet.</p>
-            <% } %>
+
+              <% if (products.length > 0) { %>
+                <div class="admin-table-wrap mt-lg">
+                  <table class="admin-data-table">
+                    <thead>
+                      <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">SKU</th>
+                        <th scope="col">Brand</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">
+                          <span class="sr-only">Actions</span>
+                        </th>
+                      </tr>
+                    </thead>
+
+                    <tbody>
+                      <% products.forEach(product => { %>
+                        <tr>
+                          <td data-label="Name">
+                            <strong><%= product.name %></strong>
+                          </td>
+
+                          <td data-label="SKU" class="text-soft">
+                            <%= product.sku %>
+                          </td>
+
+                          <td data-label="Brand">
+                            <%= product.brand %>
+                          </td>
+
+                          <td data-label="Price">
+                            <%= product.price %> SEK
+                          </td>
+
+                          <td data-label="Actions">
+                            <div class="admin-actions">
+                              <a
+                                href="/admin/products/<%= product.id %>/edit"
+                                class="btn btn-secondary btn-sm"
+                              >
+                                Edit
+                              </a>
+
+                              <form
+                                action="/admin/products/<%= product.id %>/delete"
+                                method="POST"
+                              >
+                                <button type="submit" class="btn btn-secondary btn-sm">
+                                  Delete
+                                </button>
+                              </form>
+                            </div>
+                          </td>
+                        </tr>
+                      <% }) %>
+                    </tbody>
+                  </table>
+                </div>
+              <% } else { %>
+                <p class="text-soft mt-md">No products yet.</p>
+              <% } %>
+            </div>
           </div>
         </div>
       </section>
