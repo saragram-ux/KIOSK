@@ -195,17 +195,6 @@ h3 {
 }
 
 /* Homepage page wrappers — structural only, no visual overrides yet */
-.home-hero {
-}
-
-.home-products {
-}
-
-.home-categories {
-}
-
-.home-signup {
-}
 
 .home-spots {
   display: none;
@@ -258,9 +247,6 @@ h3 {
   font-family: var(--font-mono);
   font-size: var(--text-lg);
   color: var(--color-ink);
-}
-
-.product-related {
 }
 
 .related-slider {
@@ -393,9 +379,6 @@ h3 {
    4.3 AUTH (PAGE LAYOUT)
    Register / login pages
    -------------------------------------------- */
-
-.auth-panel {
-}
 
 .auth-form {
   display: flex;
@@ -1163,11 +1146,6 @@ h3 {
   .basket-table td:last-child {
     text-align: right;
     padding-right: 0;
-  }
-
-  .admin-row {
-    grid-template-columns: 2fr 1fr 1fr 1fr auto;
-    align-items: center;
   }
 
   .admin-shell {
