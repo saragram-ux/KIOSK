@@ -388,6 +388,7 @@ router.get("/products/:slug", function (req, res, next) {
 
     const productWithFavorite = {
   ...product,
+  is_new: false,
   is_favorite: req.session.user
     ? false
     : favoriteSlugs.includes(product.slug),
@@ -399,7 +400,7 @@ router.get("/products/:slug", function (req, res, next) {
       WHERE id != ?
         AND date(published_at) <= date('now')
       ORDER BY date(published_at) DESC
-      LIMIT 3
+      LIMIT 5
     `;
 
     db.all(relatedSql, [product.id], (relatedErr, relatedRows) => {
@@ -427,12 +428,14 @@ router.get("/products/:slug", function (req, res, next) {
           return next(navErr);
         }
 
-        applyDbFavorites(req, relatedProducts, next, (relatedProductsWithFavorites) => {
-  res.render("product", {
-    title: `${product.name} | KIOSK`,
-    categories,
-    product: productWithFavorite,
-    relatedProducts: relatedProductsWithFavorites,
+        applyDbFavorites(req, [productWithFavorite], next, (mainProductsWithFavorites) => {
+  applyDbFavorites(req, relatedProducts, next, (relatedProductsWithFavorites) => {
+    res.render("product", {
+      title: `${product.name} | KIOSK`,
+      categories,
+      product: mainProductsWithFavorites[0],
+      relatedProducts: relatedProductsWithFavorites,
+    });
   });
 });
       });
@@ -554,6 +557,29 @@ router.post("/basket/decrease/:slug", function (req, res) {
   req.session.basket = req.session.basket.filter(
     (basketItem) => basketItem.quantity > 0
   );
+
+  res.redirect("/basket");
+});
+
+router.post("/basket/update/:slug", function (req, res) {
+  if (!req.session.basket) {
+    return res.redirect("/basket");
+  }
+
+  const quantity = Number(req.body.quantity);
+
+  req.session.basket = req.session.basket
+    .map((item) => {
+      if (item.slug === req.params.slug) {
+        return {
+          ...item,
+          quantity,
+        };
+      }
+
+      return item;
+    })
+    .filter((item) => item.quantity > 0);
 
   res.redirect("/basket");
 });

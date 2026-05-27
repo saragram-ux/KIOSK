@@ -195,17 +195,6 @@ h3 {
 }
 
 /* Homepage page wrappers — structural only, no visual overrides yet */
-.home-hero {
-}
-
-.home-products {
-}
-
-.home-categories {
-}
-
-.home-signup {
-}
 
 .home-spots {
   display: none;
@@ -238,6 +227,7 @@ h3 {
   border: 1px solid var(--color-border);
   border-radius: var(--radius-sm);
   overflow: hidden;
+  position: relative;
 }
 
 .product-image img {
@@ -259,7 +249,26 @@ h3 {
   color: var(--color-ink);
 }
 
-.product-related {
+.related-slider {
+  position: relative;
+}
+
+.related-slider-track {
+  display: flex;
+  gap: var(--space-md);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  padding-bottom: var(--space-sm);
+}
+
+.related-slider-item {
+  flex: 0 0 80%;
+  scroll-snap-align: start;
+}
+
+.related-slider-button {
+  display: none;
 }
 
 /* --------------------------------------------
@@ -278,33 +287,86 @@ h3 {
   line-height: 1;
 }
 
-.basket-page {
+.basket-table-wrap {
+  width: 100%;
 }
 
-.basket-list {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-lg);
+.basket-table {
+  width: 100%;
+  border-collapse: collapse;
 }
 
-.basket-item {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-md);
-  padding-bottom: var(--space-lg);
+.basket-table thead {
+  display: none;
+}
+
+.basket-table tr {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--space-xs) var(--space-md);
+  padding: var(--space-lg) 0;
   border-bottom: 1px solid var(--color-border);
 }
 
-.basket-item-info {
+.basket-table td {
+  padding: 0;
+}
+
+.basket-product-cell {
+  grid-column: 1;
+  grid-row: 1;
   display: flex;
   flex-direction: column;
   gap: 0.2rem;
 }
 
-.basket-item-meta {
+.basket-product-cell strong {
+  font-size: var(--text-xl);
+  line-height: 1.1;
+}
+
+.basket-price {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+.basket-total {
+  grid-column: 2;
+  grid-row: 1;
+  text-align: right;
+}
+
+.basket-actions-cell {
+  grid-column: 2;
+  grid-row: 2;
+  justify-self: end;
+}
+
+.basket-actions {
   display: flex;
-  flex-direction: column;
+  align-items: center;
   gap: var(--space-sm);
+}
+
+.basket-quantity-select {
+  min-width: 3.5rem;
+  padding: 0.4rem 0.5rem;
+  border: 1px solid var(--color-border);
+  background: var(--color-base);
+  color: var(--color-ink);
+  font: inherit;
+}
+
+.basket-remove-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--color-ink);
+  font-size: 1.25rem;
+  cursor: pointer;
 }
 
 .basket-summary {
@@ -318,9 +380,6 @@ h3 {
    Register / login pages
    -------------------------------------------- */
 
-.auth-panel {
-}
-
 .auth-form {
   display: flex;
   flex-direction: column;
@@ -328,25 +387,128 @@ h3 {
 
 /* --------------------------------------------
    4.4 ADMIN (PAGE LAYOUT)
-   Admin list and form pages
+   Dashboard style admin pages — mobile first
    -------------------------------------------- */
 
-.admin-layout {
+.admin-site-main {
+  background: var(--color-base);
 }
 
-.admin-table {
+.admin-page {
+  min-height: 100vh;
+}
+
+.admin-header {
+  background: var(--color-ink);
+  color: var(--color-base);
+  padding: var(--space-md) 0;
+}
+
+.admin-label {
+  font-size: var(--text-lg);
+  font-weight: 700;
+  letter-spacing: var(--tracking-tight);
+}
+
+.admin-shell {
+  display: grid;
+  gap: var(--space-lg);
+  padding: var(--space-lg) 0;
+}
+
+.admin-sidebar {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  padding: var(--space-md);
+}
+
+.admin-sidebar-title {
+  font-weight: 700;
+  margin-bottom: var(--space-sm);
+}
+
+.admin-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.admin-nav a {
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius-sm);
+  color: var(--color-ink);
+  font-size: var(--text-sm);
+  font-weight: 500;
+}
+
+.admin-nav a.is-active {
+  background: var(--color-ink);
+  color: var(--color-base);
+}
+
+.admin-main {
+  min-width: 0;
+}
+
+.admin-form-main {
+  max-width: 760px;
+}
+
+.admin-main-header {
   display: flex;
   flex-direction: column;
-  gap: var(--space-sm);
+  align-items: flex-start;
+  gap: var(--space-md);
 }
 
-.admin-row {
-  display: grid;
-  gap: var(--space-sm);
+.admin-table-wrap {
+  width: 100%;
+}
+
+.admin-data-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.admin-data-table thead {
+  display: none;
+}
+
+.admin-data-table tr {
+  display: block;
   padding: var(--space-md);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-sm);
   background: var(--color-surface);
+}
+
+.admin-data-table tr + tr {
+  margin-top: var(--space-sm);
+}
+
+.admin-data-table td {
+  display: grid;
+  gap: var(--space-xs);
+  padding: var(--space-xs) 0;
+}
+
+.admin-data-table td::before {
+  content: attr(data-label);
+  color: var(--color-muted);
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+}
+
+.admin-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.admin-actions form {
+  display: inline-flex;
 }
 
 /* --------------------------------------------
@@ -789,33 +951,64 @@ h3 {
    11. FOOTER
    -------------------------------------------- */
 
-.footer {
+.usp-section {
   border-top: 1px solid var(--color-border);
-  padding: var(--space-2xl) 0;
-  color: var(--color-ink-soft);
-  font-size: var(--text-sm);
+  padding: var(--space-lg) 0;
 }
 
-.footer-inner {
-  display: flex;
-  flex-direction: column;
-  align-items: start;
-  gap: var(--space-xl);
-  flex-wrap: wrap;
+.usp-grid {
+  display: grid;
+  gap: var(--space-md);
 }
 
-.footer-col {
+.usp-item {
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+  color: var(--color-ink);
+}
+
+.usp-item i {
+  font-size: 2rem;
+}
+
+.site-footer {
+  border-top: 1px solid var(--color-border);
+  padding: var(--space-lg) 0;
+}
+
+.footer-grid {
+  display: grid;
   gap: var(--space-sm);
 }
 
-.footer-col a {
-  color: var(--color-ink-soft);
+.footer-group {
+  border-bottom: 1px solid var(--color-border);
+  padding: var(--space-sm) 0;
 }
 
-.footer-col a:hover {
-  color: var(--color-ink);
+.footer-group summary {
+  cursor: pointer;
+  font-weight: 600;
+  list-style: none;
+}
+
+.footer-group summary::-webkit-details-marker {
+  display: none;
+}
+
+.footer-group ul {
+  list-style: none;
+  padding: var(--space-sm) 0 0;
+  margin: 0;
+  display: grid;
+  gap: var(--space-xs);
+}
+
+.footer-copy {
+  text-align: center;
+  margin-top: var(--space-lg);
+  color: var(--color-muted);
 }
 
 /* --------------------------------------------
@@ -900,30 +1093,149 @@ h3 {
     flex: 1;
   }
 
-  .basket-item {
+  .related-slider-item {
+    flex-basis: calc((100% - var(--space-md)) / 2);
+  }
+
+  .basket-table thead {
+    display: table-header-group;
+  }
+
+  .basket-table tr {
+    display: table-row;
+    padding: 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .basket-table th,
+  .basket-table td {
+    display: table-cell;
+    padding: var(--space-md) var(--space-md) var(--space-md) 0;
+    text-align: left;
+    vertical-align: middle;
+  }
+
+  .basket-table th {
+    color: var(--color-muted);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide);
+  }
+
+  .basket-product-cell,
+  .basket-price,
+  .basket-total,
+  .basket-actions-cell {
+    display: table-cell;
+  }
+
+  .basket-product-cell strong {
+    font-size: var(--text-xl);
+  }
+
+  .basket-total {
+    text-align: left;
+  }
+
+  .basket-actions {
+    justify-content: flex-end;
+  }
+
+  .basket-table th:last-child,
+  .basket-table td:last-child {
+    text-align: right;
+    padding-right: 0;
+  }
+
+  .admin-shell {
+    grid-template-columns: 180px minmax(0, 1fr);
+    align-items: start;
+  }
+
+  .admin-sidebar {
+    min-height: 420px;
+  }
+
+  .admin-nav {
+    flex-direction: column;
+  }
+
+  .admin-main-header {
     flex-direction: row;
     justify-content: space-between;
-    align-items: flex-start;
-  }
-
-  .basket-item-meta {
-    align-items: flex-end;
-  }
-
-  .basket-quantity {
-    display: flex;
     align-items: center;
-    gap: var(--space-sm);
   }
 
-  .basket-quantity-value {
-    min-width: 2rem;
-    text-align: center;
+  .admin-data-table thead {
+    display: table-header-group;
   }
 
-  .admin-row {
-    grid-template-columns: 2fr 1fr 1fr 1fr auto;
-    align-items: center;
+  .admin-data-table tr {
+    display: table-row;
+    padding: 0;
+    border: 0;
+    border-bottom: 1px solid var(--color-border);
+    border-radius: 0;
+    background: transparent;
+  }
+
+  .admin-data-table tr + tr {
+    margin-top: 0;
+  }
+
+  .admin-data-table th,
+  .admin-data-table td {
+    display: table-cell;
+    padding: var(--space-sm) var(--space-sm) var(--space-sm) 0;
+    text-align: left;
+    vertical-align: middle;
+  }
+
+  .admin-data-table th {
+    color: var(--color-muted);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide);
+  }
+
+  .admin-data-table td::before {
+    display: none;
+  }
+
+  .admin-data-table th:last-child,
+  .admin-data-table td:last-child {
+    text-align: right;
+    padding-right: 0;
+  }
+
+  .admin-actions {
+    justify-content: flex-end;
+  }
+
+  .usp-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .footer-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-xl);
+  }
+
+  .footer-group {
+    border-bottom: 0;
+    padding: 0;
+  }
+
+  .footer-group[open] ul,
+  .footer-group ul {
+    display: grid;
+  }
+
+  .footer-group summary {
+    cursor: default;
+    pointer-events: none;
   }
 }
 
@@ -1027,5 +1339,41 @@ h3 {
 
   .product-detail {
     gap: var(--space-2xl);
+  }
+
+  .related-slider-track {
+    overflow: hidden;
+  }
+
+  .related-slider-item {
+    flex-basis: calc((100% - (var(--space-md) * 2)) / 3);
+  }
+
+  .related-slider-button {
+    position: absolute;
+    top: 38%;
+    z-index: 3;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border: 0;
+    background: transparent;
+    color: var(--color-ink);
+    font-size: 2rem;
+    cursor: pointer;
+  }
+
+  .related-slider-prev {
+    left: calc(var(--space-xl) * -1);
+  }
+
+  .related-slider-next {
+    right: calc(var(--space-xl) * -1);
+  }
+
+  .usp-grid {
+    grid-template-columns: repeat(4, 1fr);
   }
 }

@@ -1,0 +1,19 @@
+<aside class="admin-sidebar" aria-label="Admin navigation">
+  <p class="admin-sidebar-title">Administration</p>
+
+  <nav class="admin-nav">
+    <a
+      href="/admin/products"
+      class="<%= currentUrl && currentUrl.startsWith('/admin/products') ? 'is-active' : '' %>"
+    >
+      Products
+    </a>
+
+    <a
+      href="/admin/categories"
+      class="<%= currentUrl && currentUrl.startsWith('/admin/categories') ? 'is-active' : '' %>"
+    >
+      Categories
+    </a>
+  </nav>
+</aside>

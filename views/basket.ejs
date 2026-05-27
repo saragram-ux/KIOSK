@@ -3,59 +3,85 @@
           <p class="label mb-md">Basket</p>
           <h1>Your basket</h1>
 
-          <% if (basket.length > 0) { %>
-            <div class="basket-list mt-lg">
-              <% let total = 0; %>
+        <% if (basket.length > 0) { %>
+  <% let total = 0; %>
 
-              <% basket.forEach(item => { %>
-                <% const itemTotal = item.price * item.quantity; %>
-                <% total += itemTotal; %>
+  <div class="basket-table-wrap mt-lg">
+    <table class="basket-table">
+      <thead>
+        <tr>
+          <th scope="col">Product</th>
+          <th scope="col">Price</th>
+          <th scope="col">Total</th>
+          <th scope="col">Quantity</th>
+        </tr>
+      </thead>
 
-                <div class="basket-item">
-                  <div class="basket-item-info">
-                    <h3><%= item.name %></h3>
-                    <p class="card-brand"><%= item.brand %></p>
-                  </div>
+      <tbody>
+        <% basket.forEach(item => { %>
+          <% const itemTotal = item.price * item.quantity; %>
+          <% total += itemTotal; %>
 
-                  <div class="basket-item-meta">
-  <p class="text-mono"><%= item.price %> SEK</p>
+          <tr>
+            <td class="basket-product-cell">
+              <strong><%= item.name %></strong>
+            </td>
 
-  <div class="basket-quantity">
-    <form action="/basket/decrease/<%= item.slug %>" method="POST">
-      <button type="submit" class="btn btn-secondary btn-sm" aria-label="Decrease quantity">
-        -
-      </button>
-    </form>
+            <td class="basket-price text-mono">
+              <%= item.price %> SEK
+            </td>
 
-    <span class="basket-quantity-value text-mono"><%= item.quantity %></span>
+            <td class="basket-total text-mono">
+              <%= itemTotal %> SEK
+            </td>
 
-    <form action="/basket/increase/<%= item.slug %>" method="POST">
-      <button type="submit" class="btn btn-secondary btn-sm" aria-label="Increase quantity">
-        +
-      </button>
-    </form>
+            <td class="basket-actions-cell">
+              <div class="basket-actions">
+                <form action="/basket/update/<%= item.slug %>" method="POST">
+                  <label class="sr-only" for="quantity-<%= item.slug %>">
+                    Quantity for <%= item.name %>
+                  </label>
+
+                  <select
+                    id="quantity-<%= item.slug %>"
+                    name="quantity"
+                    class="basket-quantity-select"
+                    onchange="this.form.submit()"
+                  >
+                    <% for (let i = 1; i <= 10; i++) { %>
+                      <option value="<%= i %>" <%= item.quantity === i ? "selected" : "" %>>
+                        <%= i %>
+                      </option>
+                    <% } %>
+                  </select>
+                </form>
+
+                <form action="/basket/remove/<%= item.slug %>" method="POST">
+                  <button
+                    type="submit"
+                    class="basket-remove-button"
+                    aria-label="Remove <%= item.name %>"
+                  >
+                    <i class="ph ph-trash"></i>
+                  </button>
+                </form>
+              </div>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
   </div>
 
-  <p class="text-mono"><%= itemTotal %> SEK</p>
+  <div class="basket-summary mt-lg">
+    <h2>Total</h2>
+    <p class="product-price mt-sm"><%= total %> SEK</p>
 
-  <form action="/basket/remove/<%= item.slug %>" method="POST">
-    <button type="submit" class="btn btn-secondary btn-sm">
-      Remove
-    </button>
-  </form>
-</div>
-                </div>
-              <% }) %>
-            </div>
-
-            <div class="basket-summary mt-lg">
-              <h2>Total</h2>
-              <p class="product-price mt-sm"><%= total %> SEK</p>
-              <div class="mt-lg">
-                <button type="button" class="btn btn-accent">Checkout</button>
-              </div>
-            </div>
-          <% } else { %>
+    <div class="mt-lg">
+      <button type="button" class="btn btn-accent">Checkout</button>
+    </div>
+  </div>
+<% } else { %>
             <div class="card-text mt-lg">
               <div class="card-body">
                 <h3>Your basket is empty</h3>
