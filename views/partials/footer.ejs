@@ -4,19 +4,36 @@
       <details class="footer-group" open>
         <summary>Shop</summary>
         <ul>
-          <li><a href="/products">All drinks</a></li>
-          <li><a href="/news">New drops</a></li>
-          <li><a href="/categories/citrus">Citrus</a></li>
-          <li><a href="/categories/botanicals">Botanicals</a></li>
+          <li><a href="/news">New</a></li>
+          <li><a href="/products">Drinks</a></li>
+
+          <% if (typeof categories !== "undefined" && categories.length) { %>
+            <% categories.forEach(category => { %>
+              <li>
+                <a href="/categories/<%= category.slug %>">
+                  <%= category.name %>
+                </a>
+              </li>
+            <% }) %>
+          <% } %>
         </ul>
       </details>
 
       <details class="footer-group">
         <summary>Account</summary>
         <ul>
-          <li><a href="/login">Log in</a></li>
-          <li><a href="/favorites">Favorites</a></li>
-          <li><a href="/basket">Basket</a></li>
+          <% if (user) { %>
+            <li><a href="/favorites">Favorites</a></li>
+            <li><a href="/basket">Basket</a></li>
+
+            <% if (user.admin) { %>
+              <li><a href="/admin/products">Admin</a></li>
+            <% } %>
+          <% } else { %>
+            <li><a href="/login">Log in</a></li>
+            <li><a href="/favorites">Favorites</a></li>
+            <li><a href="/basket">Basket</a></li>
+          <% } %>
         </ul>
       </details>
 
