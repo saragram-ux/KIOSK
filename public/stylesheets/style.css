@@ -1324,8 +1324,8 @@ h3 {
   }
 
   .hero-content {
-    align-items: flex-start;
-    text-align: left;
+    align-items: center;
+    text-align: center;
     order: 1;
   }
 
