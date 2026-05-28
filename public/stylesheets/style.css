@@ -181,6 +181,11 @@ h3 {
   align-items: baseline;
 }
 
+.section-header-centered {
+  justify-content: center;
+  text-align: center;
+}
+
 /* Narrow centered container — signup, login, register */
 .container-narrow {
   max-width: 600px;
@@ -247,6 +252,10 @@ h3 {
   font-family: var(--font-mono);
   font-size: var(--text-lg);
   color: var(--color-ink);
+}
+
+.product-related {
+  display: none;
 }
 
 .related-slider {
@@ -1153,8 +1162,41 @@ h3 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .product-related {
+    display: block;
+  }
+
+  .related-slider-track {
+    overflow: hidden;
+  }
+
   .related-slider-item {
-    flex-basis: calc((100% - var(--space-md)) / 2);
+    flex: 0 0 calc((100% - (var(--space-md) * 2)) / 3);
+  }
+
+  .related-slider-button {
+    position: absolute;
+    top: 38%;
+    z-index: 3;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    background: var(--color-base);
+    color: var(--color-ink);
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+
+  .related-slider-prev {
+    left: var(--space-sm);
+  }
+
+  .related-slider-next {
+    right: var(--space-sm);
   }
 
   .basket-table thead {
@@ -1399,38 +1441,6 @@ h3 {
 
   .product-detail {
     gap: var(--space-2xl);
-  }
-
-  .related-slider-track {
-    overflow: hidden;
-  }
-
-  .related-slider-item {
-    flex-basis: calc((100% - (var(--space-md) * 2)) / 3);
-  }
-
-  .related-slider-button {
-    position: absolute;
-    top: 38%;
-    z-index: 3;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 2.5rem;
-    height: 2.5rem;
-    border: 0;
-    background: transparent;
-    color: var(--color-ink);
-    font-size: 2rem;
-    cursor: pointer;
-  }
-
-  .related-slider-prev {
-    left: calc(var(--space-xl) * -1);
-  }
-
-  .related-slider-next {
-    right: calc(var(--space-xl) * -1);
   }
 
   .usp-grid {
