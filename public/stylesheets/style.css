@@ -520,6 +520,56 @@ h3 {
   display: inline-flex;
 }
 
+.admin-icon-actions {
+  justify-content: flex-end;
+}
+
+.admin-icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 1px solid var(--color-ink);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-ink);
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.admin-icon-button:hover {
+  background: var(--color-ink);
+  color: var(--color-base);
+}
+
+.admin-icon-actions form {
+  margin: 0;
+}
+
+.admin-field {
+  width: 100%;
+}
+
+.admin-field-sm {
+  max-width: 14rem;
+}
+
+.admin-field-md {
+  max-width: 28rem;
+}
+
+.admin-field-lg {
+  max-width: 42rem;
+}
+
+.admin-field input,
+.admin-field textarea,
+.admin-field select {
+  width: 100%;
+}
+
 /* --------------------------------------------
    4.5 HERO (PAGE LAYOUT)
    Mobile first hero with video/image media

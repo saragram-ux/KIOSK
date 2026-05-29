@@ -43,23 +43,28 @@
             </td>
 
             <td data-label="Actions">
-              <div class="admin-actions">
-                <a
-                  href="/admin/products/<%= product.id %>/edit"
-                  class="btn btn-secondary btn-sm"
-                >
-                  Edit
-                </a>
+              <div class="admin-actions admin-icon-actions">
+  <a
+    href="/admin/products/<%= product.id %>/edit"
+    class="admin-icon-button"
+    aria-label="Edit <%= product.name %>"
+  >
+    <i class="ph ph-pencil-simple" aria-hidden="true"></i>
+  </a>
 
-                <form
-                  action="/admin/products/<%= product.id %>/delete"
-                  method="POST"
-                >
-                  <button type="submit" class="btn btn-secondary btn-sm">
-                    Delete
-                  </button>
-                </form>
-              </div>
+  <form
+    action="/admin/products/<%= product.id %>/delete"
+    method="POST"
+  >
+    <button
+      type="submit"
+      class="admin-icon-button"
+      aria-label="Delete <%= product.name %>"
+    >
+      <i class="ph ph-trash" aria-hidden="true"></i>
+    </button>
+  </form>
+</div>
             </td>
           </tr>
         <% }) %>

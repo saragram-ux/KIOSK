@@ -105,8 +105,10 @@ router.post("/products/new", requireAdmin, uploadProductImage.single("image"), f
   const errors = {};
 
   if (!formData.name) {
-    errors.name = "Name is required.";
-  }
+  errors.name = "Name is required.";
+} else if (formData.name.length > 25) {
+  errors.name = "Name must be 25 characters or fewer.";
+}
 
   if (!formData.slug) {
     errors.slug = "Slug is required.";
@@ -290,8 +292,10 @@ router.post("/products/:id/edit", requireAdmin, uploadProductImage.single("image
   const errors = {};
 
   if (!formData.name) {
-    errors.name = "Name is required.";
-  }
+  errors.name = "Name is required.";
+} else if (formData.name.length > 25) {
+  errors.name = "Name must be 25 characters or fewer.";
+}
 
   if (!formData.slug) {
     errors.slug = "Slug is required.";
@@ -496,8 +500,10 @@ router.post("/categories/new", requireAdmin, uploadCategoryImage.single("image")
   const errors = {};
 
   if (!formData.name) {
-    errors.name = "Name is required.";
-  }
+  errors.name = "Name is required.";
+} else if (formData.name.length > 25) {
+  errors.name = "Name must be 25 characters or fewer.";
+}
 
   if (!formData.slug) {
     errors.slug = "Slug is required.";
