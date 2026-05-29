@@ -14,11 +14,7 @@
       <section class="section category-products">
         <div class="container">
           <% if (products.length > 0) { %>
-            <div class="grid grid-products">
-              <% products.forEach(product => { %>
-                <%- include('partials/product-card', { product: product, currentUrl: currentUrl }) %>
-              <% }) %>
-            </div>
+            <%- include('partials/product-grid', { products, currentUrl }) %>
           <% } else { %>
             <div class="card-text">
               <div class="card-body">
