@@ -181,6 +181,11 @@ h3 {
   align-items: baseline;
 }
 
+.section-header-centered {
+  justify-content: center;
+  text-align: center;
+}
+
 /* Narrow centered container — signup, login, register */
 .container-narrow {
   max-width: 600px;
@@ -247,6 +252,10 @@ h3 {
   font-family: var(--font-mono);
   font-size: var(--text-lg);
   color: var(--color-ink);
+}
+
+.product-related {
+  display: none;
 }
 
 .related-slider {
@@ -511,6 +520,56 @@ h3 {
   display: inline-flex;
 }
 
+.admin-icon-actions {
+  justify-content: flex-end;
+}
+
+.admin-icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 1px solid var(--color-ink);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-ink);
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.admin-icon-button:hover {
+  background: var(--color-ink);
+  color: var(--color-base);
+}
+
+.admin-icon-actions form {
+  margin: 0;
+}
+
+.admin-field {
+  width: 100%;
+}
+
+.admin-field-sm {
+  max-width: 14rem;
+}
+
+.admin-field-md {
+  max-width: 28rem;
+}
+
+.admin-field-lg {
+  max-width: 42rem;
+}
+
+.admin-field input,
+.admin-field textarea,
+.admin-field select {
+  width: 100%;
+}
+
 /* --------------------------------------------
    4.5 HERO (PAGE LAYOUT)
    Mobile first hero with video/image media
@@ -557,43 +616,78 @@ h3 {
 .site-header {
   border-bottom: 1px solid var(--color-border);
   background: var(--color-base);
-  position: sticky;
-  top: 0;
+  position: relative;
   z-index: 100;
 }
 
 .top-header {
   display: flex;
+  position: static;
   flex-direction: column;
+  align-items: flex-start;
   gap: var(--space-md);
   padding: var(--space-md) 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--color-base);
 }
 
 .logo-link {
-  font-size: var(--text-lg);
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  flex-shrink: 0;
+  color: var(--color-ink);
+  font-size: 1.75rem;
   font-weight: 700;
   letter-spacing: var(--tracking-tight);
-  align-self: flex-start;
+  line-height: 1;
 }
 
 .header-actions {
   display: flex;
   align-items: center;
   gap: var(--space-sm);
+  width: 100%;
 }
 
 .search-form {
   flex: 1;
+  min-width: 0;
 }
 
-.search-input {
+.search-field {
+  position: relative;
+  display: flex;
+  align-items: center;
   width: 100%;
+  max-width: 28rem;
+}
+
+.search-field i {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-muted);
+  font-size: 1rem;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.search-field .search-input {
+  width: 100%;
+  height: 2.75rem;
+  padding: 0.45rem 1rem 0.45rem 2.75rem;
+  line-height: 1.2;
 }
 
 .header-icons {
   display: flex;
   align-items: center;
   gap: var(--space-sm);
+  flex-shrink: 0;
 }
 
 .icon-link {
@@ -911,7 +1005,7 @@ h3 {
 }
 
 .grid-products {
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  grid-template-columns: 1fr;
 }
 
 /* Two-column grid for categories, features, etc. */
@@ -1059,14 +1153,35 @@ h3 {
     flex-direction: row;
   }
 
+  .site-header {
+    position: sticky;
+    top: 0;
+  }
+
   .top-header {
     flex-direction: row;
     align-items: center;
     gap: var(--space-lg);
   }
 
+  .logo-link {
+    align-self: center;
+    font-size: 2rem;
+    line-height: 1;
+  }
+
   .header-actions {
-    flex-grow: 1;
+    flex: 1;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .search-form {
+    flex: 0 1 32rem;
+  }
+
+  .search-field {
+    max-width: 32rem;
   }
 
   .nav-list {
@@ -1093,8 +1208,45 @@ h3 {
     flex: 1;
   }
 
+  .grid-products {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .product-related {
+    display: block;
+  }
+
+  .related-slider-track {
+    overflow: hidden;
+  }
+
   .related-slider-item {
-    flex-basis: calc((100% - var(--space-md)) / 2);
+    flex: 0 0 calc((100% - (var(--space-md) * 2)) / 3);
+  }
+
+  .related-slider-button {
+    position: absolute;
+    top: 38%;
+    z-index: 3;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    background: var(--color-base);
+    color: var(--color-ink);
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+
+  .related-slider-prev {
+    left: var(--space-sm);
+  }
+
+  .related-slider-next {
+    right: var(--space-sm);
   }
 
   .basket-table thead {
@@ -1268,8 +1420,8 @@ h3 {
   }
 
   .hero-content {
-    align-items: flex-start;
-    text-align: left;
+    align-items: center;
+    text-align: center;
     order: 1;
   }
 
@@ -1339,38 +1491,6 @@ h3 {
 
   .product-detail {
     gap: var(--space-2xl);
-  }
-
-  .related-slider-track {
-    overflow: hidden;
-  }
-
-  .related-slider-item {
-    flex-basis: calc((100% - (var(--space-md) * 2)) / 3);
-  }
-
-  .related-slider-button {
-    position: absolute;
-    top: 38%;
-    z-index: 3;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 2.5rem;
-    height: 2.5rem;
-    border: 0;
-    background: transparent;
-    color: var(--color-ink);
-    font-size: 2rem;
-    cursor: pointer;
-  }
-
-  .related-slider-prev {
-    left: calc(var(--space-xl) * -1);
-  }
-
-  .related-slider-next {
-    right: calc(var(--space-xl) * -1);
   }
 
   .usp-grid {

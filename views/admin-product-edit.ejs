@@ -1,181 +1,162 @@
-<!-- views/admin-product-edit.ejs -->
- <!DOCTYPE html>
-<html lang="en">
-  <%- include('partials/head') %>
-  <body>
-  <main class="site-main admin-site-main">
-    <section class="admin-page">
-      <div class="admin-header">
-        <div class="container">
-          <p class="admin-label">Administration</p>
-        </div>
-      </div>
+<h1>Edit product</h1>
 
-      <div class="container">
-        <div class="admin-shell">
-          <%- include('partials/admin-sidebar') %>
-
-          <div class="admin-main admin-form-main">
-            <p class="label mb-md">Administration</p>
-          <h1>Edit product</h1>
-
-          <form action="/admin/products/<%= product.id %>/edit" method="POST" enctype="multipart/form-data" class="auth-form mt-lg">
-            <% if (errors.general) { %>
-              <p class="form-error mb-md"><%= errors.general %></p>
-            <% } %>
-
-            <div class="form-group">
-              <label for="name" class="form-label">Name</label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                class="form-input"
-                value="<%= formData.name %>"
-                required
-              />
-              <% if (errors.name) { %>
-                <p class="form-error"><%= errors.name %></p>
-              <% } %>
-            </div>
-
-            <div class="form-group mt-md">
-              <label for="slug" class="form-label">Slug</label>
-              <input
-                type="text"
-                id="slug"
-                name="slug"
-                class="form-input"
-                value="<%= formData.slug %>"
-                required
-              />
-              <% if (errors.slug) { %>
-                <p class="form-error"><%= errors.slug %></p>
-              <% } %>
-            </div>
-
-            <div class="form-group mt-md">
-  <label for="sku" class="form-label">SKU</label>
-  <input
-    type="text"
-    id="sku"
-    name="sku"
-    class="form-input"
-    value="<%= formData.sku %>"
-    pattern="[A-Z]{3}[0-9]{3}"
-    title="Use format ABC123"
-    placeholder="ABC123"
-    required
-  />
-  <% if (errors.sku) { %>
-    <p class="form-error"><%= errors.sku %></p>
-  <% } %>
-</div>
-
-            <div class="form-group mt-md">
-              <label for="brand" class="form-label">Brand</label>
-              <input
-                type="text"
-                id="brand"
-                name="brand"
-                class="form-input"
-                value="<%= formData.brand %>"
-                required
-              />
-              <% if (errors.brand) { %>
-                <p class="form-error"><%= errors.brand %></p>
-              <% } %>
-            </div>
-
-            <div class="form-group mt-md">
-              <label for="description" class="form-label">Description</label>
-              <textarea
-                id="description"
-                name="description"
-                class="form-input"
-                rows="4"
-              ><%= formData.description %></textarea>
-            </div>
-
-            <div class="form-group mt-md">
-              <label for="price" class="form-label">Price</label>
-              <input
-                type="number"
-                id="price"
-                name="price"
-                class="form-input"
-                value="<%= formData.price %>"
-                required
-              />
-              <% if (errors.price) { %>
-                <p class="form-error"><%= errors.price %></p>
-              <% } %>
-            </div>
-
-            <div class="form-group mt-md">
-  <label for="image" class="form-label">Replace image</label>
-
-  <% if (formData.image_url) { %>
-    <p class="text-soft text-sm mb-md">
-      Current image: <%= formData.image_url %>
-    </p>
+<form action="/admin/products/<%= product.id %>/edit" method="POST" enctype="multipart/form-data" class="auth-form mt-lg">
+  <% if (errors.general) { %>
+    <p class="form-error mb-md"><%= errors.general %></p>
   <% } %>
 
-  <input
-    type="file"
-    id="image"
-    name="image"
-    class="form-input"
-    accept="image/*"
-  />
-</div>
+  <div class="form-group admin-field admin-field-md">
+    <label for="name" class="form-label">Name</label>
+    <input
+      type="text"
+      id="name"
+      name="name"
+      class="form-input"
+      value="<%= formData.name %>"
+      required
+      maxlength="25"
+    />
+    <% if (errors.name) { %>
+      <p class="form-error"><%= errors.name %></p>
+    <% } %>
+  </div>
 
-            <div class="form-group mt-md">
-              <label for="published_at" class="form-label">Publish date</label>
-              <input
-                type="date"
-                id="published_at"
-                name="published_at"
-                class="form-input"
-                value="<%= formData.published_at %>"
-                required
-              />
-              <% if (errors.published_at) { %>
-                <p class="form-error"><%= errors.published_at %></p>
-              <% } %>
-            </div>
+  <div class="form-group admin-field admin-field-md mt-md">
+    <label for="slug" class="form-label">Slug</label>
+    <input
+      type="text"
+      id="slug"
+      name="slug"
+      class="form-input"
+      value="<%= formData.slug %>"
+      required
+      placeholder="cucumber-yuzu-sea-salt"
+    />
+    <% if (errors.slug) { %>
+      <p class="form-error"><%= errors.slug %></p>
+    <% } %>
+  </div>
 
-            <div class="form-group mt-md">
-              <label for="category_id" class="form-label">Category</label>
-              <select
-                id="category_id"
-                name="category_id"
-                class="form-input"
-                required
-              >
-                <option value="">Select category</option>
-                <% categories.forEach(category => { %>
-                  <option
-                    value="<%= category.id %>"
-                    <%= String(formData.category_id) === String(category.id) ? "selected" : "" %>
-                  >
-                    <%= category.name %>
-                  </option>
-                <% }) %>
-              </select>
-              <% if (errors.category_id) { %>
-                <p class="form-error"><%= errors.category_id %></p>
-              <% } %>
-            </div>
+  <div class="form-group admin-field admin-field-lg mt-md">
+    <label for="description" class="form-label">Description</label>
+    <textarea
+      id="description"
+      name="description"
+      class="form-input"
+      rows="5"
+    ><%= formData.description %></textarea>
+    <% if (errors.description) { %>
+      <p class="form-error"><%= errors.description %></p>
+    <% } %>
+  </div>
 
-            <div class="mt-lg">
-              <button type="submit" class="btn btn-primary">Update product</button>
-            </div>
-          </form>
-                 </div>
-        </div>
-      </div>
-    </section>
-  </main>
-</body>
-</html>
+  <div class="form-group admin-field admin-field-md mt-md">
+    <label for="image" class="form-label">Replace image</label>
+
+    <% if (formData.image_url) { %>
+      <p class="text-soft text-sm mb-md">
+        Current image: <%= formData.image_url %>
+      </p>
+    <% } %>
+
+    <input
+      type="file"
+      id="image"
+      name="image"
+      class="form-input"
+      accept="image/*"
+    />
+    <% if (errors.image) { %>
+      <p class="form-error"><%= errors.image %></p>
+    <% } %>
+  </div>
+
+  <div class="form-group admin-field admin-field-md mt-md">
+    <label for="brand" class="form-label">Brand</label>
+    <input
+      type="text"
+      id="brand"
+      name="brand"
+      class="form-input"
+      value="<%= formData.brand %>"
+      required
+    />
+    <% if (errors.brand) { %>
+      <p class="form-error"><%= errors.brand %></p>
+    <% } %>
+  </div>
+
+  <div class="form-group admin-field admin-field-sm mt-md">
+    <label for="sku" class="form-label">SKU</label>
+    <input
+      type="text"
+      id="sku"
+      name="sku"
+      class="form-input"
+      value="<%= formData.sku %>"
+      required
+      maxlength="6"
+      pattern="[A-Z]{3}[0-9]{3}"
+      placeholder="ABC123"
+    />
+    <% if (errors.sku) { %>
+      <p class="form-error"><%= errors.sku %></p>
+    <% } %>
+  </div>
+
+  <div class="form-group admin-field admin-field-sm mt-md">
+    <label for="price" class="form-label">Price</label>
+    <input
+      type="number"
+      id="price"
+      name="price"
+      class="form-input"
+      value="<%= formData.price %>"
+      required
+      min="0"
+    />
+    <% if (errors.price) { %>
+      <p class="form-error"><%= errors.price %></p>
+    <% } %>
+  </div>
+
+  <div class="form-group admin-field admin-field-md mt-md">
+    <label for="published_at" class="form-label">Publish date</label>
+    <input
+      type="date"
+      id="published_at"
+      name="published_at"
+      class="form-input"
+      value="<%= formData.published_at %>"
+      required
+    />
+    <% if (errors.published_at) { %>
+      <p class="form-error"><%= errors.published_at %></p>
+    <% } %>
+  </div>
+
+  <div class="form-group admin-field admin-field-md mt-md">
+    <label for="category_id" class="form-label">Category</label>
+    <select id="category_id" name="category_id" class="form-input" required>
+      <option value="">Choose category</option>
+
+      <% categories.forEach(category => { %>
+        <option
+          value="<%= category.id %>"
+          <%= String(formData.category_id) === String(category.id) ? "selected" : "" %>
+        >
+          <%= category.name %>
+        </option>
+      <% }) %>
+    </select>
+    <% if (errors.category_id) { %>
+      <p class="form-error"><%= errors.category_id %></p>
+    <% } %>
+  </div>
+
+  <div class="mt-lg">
+    <button type="submit" class="btn btn-primary">
+      Save product
+    </button>
+  </div>
+</form>
