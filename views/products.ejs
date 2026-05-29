@@ -11,14 +11,7 @@
 <section class="section">
   <div class="container">
     <% if (products.length > 0) { %>
-      <div class="grid grid-products">
-        <% products.forEach(product => { %>
-          <%- include('partials/product-card', {
-            product: product,
-            currentUrl: currentUrl
-          }) %>
-        <% }) %>
-      </div>
+      <%- include('partials/product-grid', { products, currentUrl }) %>
     <% } else { %>
       <p>No products available.</p>
     <% } %>
