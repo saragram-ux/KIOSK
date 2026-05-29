@@ -32,6 +32,8 @@ const categoryImageStorage = multer.diskStorage({
 const uploadProductImage = multer({ storage: productImageStorage });
 const uploadCategoryImage = multer({ storage: categoryImageStorage });
 
+const adminLayout = "layouts/admin";
+
 router.get("/products", requireAdmin, function (req, res, next) {
   const productsSql = `
     SELECT id, name, slug, sku, brand, price
@@ -45,6 +47,7 @@ router.get("/products", requireAdmin, function (req, res, next) {
     }
 
     res.render("admin-products", {
+      layout: adminLayout,
       title: "Admin Products | KIOSK",
       products,
     });
@@ -64,6 +67,8 @@ router.get("/products/new", requireAdmin, function (req, res, next) {
     }
 
     res.render("admin-product-new", {
+      layout: adminLayout,
+      adminMainClass: "admin-form-main",
       title: "New Product | KIOSK",
       categories,
       errors: {},
@@ -142,6 +147,8 @@ router.post("/products/new", requireAdmin, uploadProductImage.single("image"), f
       }
 
       res.render("admin-product-new", {
+        layout: adminLayout,
+        adminMainClass: "admin-form-main",
         title: "New Product | KIOSK",
         categories,
         errors,
@@ -181,6 +188,8 @@ router.post("/products/new", requireAdmin, uploadProductImage.single("image"), f
           }
 
           res.render("admin-product-new", {
+            layout: adminLayout,
+            adminMainClass: "admin-form-main",
             title: "New Product | KIOSK",
             categories,
             errors,
@@ -246,6 +255,8 @@ router.get("/products/:id/edit", requireAdmin, function (req, res, next) {
           }
 
           res.render("admin-product-edit", {
+            layout: adminLayout,
+            adminMainClass: "admin-form-main",
             title: "Edit Product | KIOSK",
             product,
             categories,
@@ -321,6 +332,8 @@ router.post("/products/:id/edit", requireAdmin, uploadProductImage.single("image
       }
 
       res.render("admin-product-edit", {
+        layout: adminLayout,
+        adminMainClass: "admin-form-main",
         title: "Edit Product | KIOSK",
         product: { id: productId },
         categories,
@@ -379,6 +392,8 @@ db.get(existingProductSql, [productId], (existingErr, existingProduct) => {
           }
 
           res.render("admin-product-edit", {
+            layout: adminLayout,
+            adminMainClass: "admin-form-main",
             title: "Edit Product | KIOSK",
             product: { id: productId },
             categories,
@@ -446,6 +461,7 @@ router.get("/categories", requireAdmin, function (req, res, next) {
     }
 
     res.render("admin-categories", {
+      layout: adminLayout,
       title: "Admin Categories | KIOSK",
       categories,
     });
@@ -454,6 +470,8 @@ router.get("/categories", requireAdmin, function (req, res, next) {
 
 router.get("/categories/new", requireAdmin, function (req, res) {
   res.render("admin-category-new", {
+    layout: adminLayout,
+    adminMainClass: "admin-form-main",
     title: "New Category | KIOSK",
     errors: {},
     formData: {
@@ -487,6 +505,8 @@ router.post("/categories/new", requireAdmin, uploadCategoryImage.single("image")
 
   if (Object.keys(errors).length > 0) {
     return res.render("admin-category-new", {
+      layout: adminLayout,
+      adminMainClass: "admin-form-main",
       title: "New Category | KIOSK",
       errors,
       formData,
@@ -507,6 +527,8 @@ router.post("/categories/new", requireAdmin, uploadCategoryImage.single("image")
           errors.slug = "Slug already exists.";
 
           return res.render("admin-category-new", {
+            layout: adminLayout,
+            adminMainClass: "admin-form-main",
             title: "New Category | KIOSK",
             errors,
             formData,
@@ -539,6 +561,8 @@ router.get("/categories/:id/edit", requireAdmin, function (req, res, next) {
     }
 
     res.render("admin-category-edit", {
+      layout: adminLayout,
+      adminMainClass: "admin-form-main",
       title: "Edit Category | KIOSK",
       category,
       errors: {},
@@ -565,6 +589,8 @@ router.post("/categories/:id/edit", requireAdmin, uploadCategoryImage.single("im
 
   if (Object.keys(errors).length > 0) {
     return res.render("admin-category-edit", {
+      layout: adminLayout,
+      adminMainClass: "admin-form-main",
       title: "Edit Category | KIOSK",
       category: { id: categoryId },
       errors,
@@ -603,6 +629,8 @@ router.post("/categories/:id/edit", requireAdmin, uploadCategoryImage.single("im
           errors.slug = "Slug already exists.";
 
           return res.render("admin-category-edit", {
+            layout: adminLayout,
+            adminMainClass: "admin-form-main",
             title: "Edit Category | KIOSK",
             category: { id: categoryId },
             errors,

@@ -1,21 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-  <%- include('partials/head') %>
-<body>
-  <main class="site-main admin-site-main">
-    <section class="admin-page">
-      <div class="admin-header">
-        <div class="container">
-          <p class="admin-label">Administration</p>
-        </div>
-      </div>
-
-      <div class="container">
-        <div class="admin-shell">
-          <%- include('partials/admin-sidebar') %>
-
-          <div class="admin-main admin-form-main">
-            <p class="label mb-md">Administration</p>
           <h1>New product</h1>
 
           <form action="/admin/products/new" method="POST" enctype="multipart/form-data" class="auth-form mt-lg">
@@ -164,10 +146,3 @@
               <button type="submit" class="btn btn-primary">Save product</button>
             </div>
           </form>
-                 </div>
-        </div>
-      </div>
-    </section>
-  </main>
-</body>
-</html>

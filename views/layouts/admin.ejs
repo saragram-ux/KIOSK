@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('../partials/head') %>
+
+  <body>
+    <main class="site-main admin-site-main">
+      <section class="admin-page">
+        <div class="admin-header">
+          <div class="container">
+            <p class="admin-label">KIOSK Admin</p>
+          </div>
+        </div>
+
+        <div class="container">
+          <div class="admin-shell">
+            <%- include('../partials/admin-sidebar') %>
+
+            <div
+              class="admin-main <%= typeof adminMainClass !== 'undefined' ? adminMainClass : '' %>"
+            >
+              <%- body %>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
