@@ -1,5 +1,5 @@
 <div class="grid grid-products">
   <% products.forEach(product => { %>
-    <%- include('partials/product-card', { product: product, currentUrl: currentUrl }) %>
+    <%- include('product-card', { product: product, currentUrl: currentUrl }) %>
   <% }) %>
 </div>
